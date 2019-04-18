@@ -5,4 +5,7 @@
     <option name="width" value="980" />
     <option name="height" value="1040" />
   </component>
+  <component name="PropertiesComponent">
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1555630555138" />
+  </component>
 </project>
