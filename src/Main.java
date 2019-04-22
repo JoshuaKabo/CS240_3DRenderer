@@ -1,3 +1,4 @@
+import com.jogamp.graph.geom.Vertex;
 import com.jogamp.opengl.*;
 import com.jogamp.opengl.awt.GLCanvas;
 
@@ -9,10 +10,8 @@ public class Main extends JFrame implements GLEventListener {
     private int width = 800;
     private int height = 600;
 
-
     public static void main(String[] args) {
         Main main = new Main();
-
     }
 
     public Main() {
