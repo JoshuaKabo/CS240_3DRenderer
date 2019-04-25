@@ -54,11 +54,44 @@ public class Main extends JFrame implements GLEventListener {
 
         gl.glColor3f(1.0f, 0.0f, 0.0f );
 
-        gl.glBegin(GL2.GL_POLYGON);
+
+
+//        gl.glBegin(GL2.GL_POLYGON);
+//        gl.glVertex3f( -0.5f, -0.5f, 0.0f );
+//        gl.glVertex3f( -0.5f, 0.5f, 0.0f );
+//        gl.glVertex3f( 0.5f, 0.5f, 0.0f );
+//        gl.glVertex3f( 0.5f, -0.5f, 0.0f );
+//        gl.glEnd();
+
+        gl.glLineWidth(10f);
+        gl.glBegin(GL2.GL_LINES);
+
+        //left and right lines
+
+        //bot left
         gl.glVertex3f( -0.5f, -0.5f, 0.0f );
+        //top left
         gl.glVertex3f( -0.5f, 0.5f, 0.0f );
-        gl.glVertex3f( 0.5f, 0.5f, 0.0f );
+
+        //bot right
         gl.glVertex3f( 0.5f, -0.5f, 0.0f );
+        //top right
+        gl.glVertex3f( 0.5f, 0.5f, 0.0f );
+
+
+        //top and bottom lines
+
+        //bot left
+        gl.glVertex3f( -0.5f, -0.5f, 0.0f );
+        //bot right
+        gl.glVertex3f( 0.5f, -0.5f, 0.0f );
+
+
+        //top left
+        gl.glVertex3f( -0.5f, 0.5f, 0.0f );
+        //top right
+        gl.glVertex3f( 0.5f, 0.5f, 0.0f );
+
         gl.glEnd();
 
         gl.glFlush();
