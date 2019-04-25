@@ -35,7 +35,8 @@ public class Main extends JFrame implements GLEventListener {
     @Override
     public void init(GLAutoDrawable glAutoDrawable) {
         GL4 gl = glAutoDrawable.getGL().getGL4();
-        gl.glClearColor(0.392f, 0.584f, 0.929f, 1.0f);
+        //               Red      Green    Blue   Alpha
+        gl.glClearColor(0.0f, 0.0f, 1f, 1.0f);
     }
 
     @Override
