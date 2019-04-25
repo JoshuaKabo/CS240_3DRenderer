@@ -1,20 +1,15 @@
-import com.jogamp.opengl.GL4;
+import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilities;
-import com.jogamp.graph.geom.Vertex;
 import com.jogamp.opengl.*;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLCanvas;
-import com.jogamp.opengl.awt.GLCanvas;
 import javax.swing.JFrame;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class Main extends JFrame implements GLEventListener {
     private static final long serialVersionUID = 1L;
 
-    private int width = 800;
+    private int width = 600;
     private int height = 600;
 
     public static void main(String[] args) {
@@ -23,7 +18,7 @@ public class Main extends JFrame implements GLEventListener {
 
     public Main() {
         super("Minimal OpenGL");
-        GLProfile profile = GLProfile.get(GLProfile.GL4);
+        GLProfile profile = GLProfile.get(GLProfile.GL2);
         GLCapabilities capabilities = new GLCapabilities(profile);
 
         GLCanvas canvas = new GLCanvas(capabilities);
@@ -42,7 +37,7 @@ public class Main extends JFrame implements GLEventListener {
 
     @Override
     public void init(GLAutoDrawable glAutoDrawable) {
-        GL4 gl = glAutoDrawable.getGL().getGL4();
+        GL2 gl = glAutoDrawable.getGL().getGL2();
         //               Red      Green    Blue   Alpha
         gl.glClearColor(0.0f, 0.0f, 1f, 0.5f);
     }
@@ -54,11 +49,19 @@ public class Main extends JFrame implements GLEventListener {
 
     @Override
     public void display(GLAutoDrawable glAutoDrawable) {
-        GL4 gl = glAutoDrawable.getGL().getGL4();
+        GL2 gl = glAutoDrawable.getGL().getGL2();
         gl.glClear(GL4.GL_COLOR_BUFFER_BIT | GL4.GL_DEPTH_BUFFER_BIT);
 
-        gl.glFlush();
+        gl.glColor3f(1.0f, 0.0f, 0.0f );
 
+        gl.glBegin(GL2.GL_POLYGON);
+        gl.glVertex3f( -0.5f, -0.5f, 0.0f );
+        gl.glVertex3f( -0.5f, 0.5f, 0.0f );
+        gl.glVertex3f( 0.5f, 0.5f, 0.0f );
+        gl.glVertex3f( 0.5f, -0.5f, 0.0f );
+        gl.glEnd();
+
+        gl.glFlush();
     }
 
     @Override
