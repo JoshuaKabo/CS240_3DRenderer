@@ -11,4 +11,9 @@ public class Cube implements Mesh{
     public ProjectVertex[] getVertices() {
         return new ProjectVertex[0];
     }
+
+    @Override
+    public ProjectEdge[] getEdges() {
+        return new ProjectEdge[0];
+    }
 }

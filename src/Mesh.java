@@ -4,4 +4,7 @@ public interface Mesh {
     scene and draw rays to them
      */
     public ProjectVertex[] getVertices();
+
+    public ProjectEdge[] getEdges();
+
 }
