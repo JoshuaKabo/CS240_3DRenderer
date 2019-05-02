@@ -1,4 +1,5 @@
 public class Camera {
+
     private ProjectVertex location;
     private ProjectVertex camDimensions;
     private Plane viewingPlane;
