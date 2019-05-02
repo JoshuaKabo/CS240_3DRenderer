@@ -11,4 +11,14 @@ public class ProjectVertex {
         this.coordinates = coordinates;
     }
 
+    public float getX(){
+        return coordinates[0];
+    }
+    public float getY(){
+        return coordinates[1];
+    }
+    public float getZ(){
+        return coordinates[2];
+    }
+
 }

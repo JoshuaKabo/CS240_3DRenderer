@@ -33,13 +33,16 @@ public class Main extends JFrame implements GLEventListener {
         this.setResizable(true);
         canvas.requestFocusInWindow();
 
+
+        Plane p = new Plane();
+       // p.printTest();
     }
 
     @Override
     public void init(GLAutoDrawable glAutoDrawable) {
         GL2 gl = glAutoDrawable.getGL().getGL2();
         //               Red      Green    Blue   Alpha
-        gl.glClearColor(0.0f, 0.0f, 1f, 0.5f);
+        gl.glClearColor(0.18f, 0.18f, 0.18f, 1f);
     }
 
     @Override
@@ -52,7 +55,7 @@ public class Main extends JFrame implements GLEventListener {
         GL2 gl = glAutoDrawable.getGL().getGL2();
         gl.glClear(GL4.GL_COLOR_BUFFER_BIT | GL4.GL_DEPTH_BUFFER_BIT);
 
-        gl.glColor3f(1.0f, 0.0f, 0.0f );
+        gl.glColor3f(1.0f, 1.0f, 1.0f );
 
 
 
@@ -63,7 +66,7 @@ public class Main extends JFrame implements GLEventListener {
 //        gl.glVertex3f( 0.5f, -0.5f, 0.0f );
 //        gl.glEnd();
 
-        gl.glLineWidth(10f);
+        gl.glLineWidth(2f);
         gl.glBegin(GL2.GL_LINES);
 
         //left and right lines

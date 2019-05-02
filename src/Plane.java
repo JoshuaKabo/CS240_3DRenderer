@@ -1,5 +1,4 @@
 public class Plane implements Mesh{
-
     private ProjectVertex[] Vertices;
     private ProjectEdge[] Edges;
 
@@ -50,6 +49,11 @@ public class Plane implements Mesh{
                 //Bottom
                 new ProjectEdge(Vertices[0],Vertices[1])
         };
+    }
+
+    public void Rotate(float degrees)
+    {
+
     }
 
     @Override
