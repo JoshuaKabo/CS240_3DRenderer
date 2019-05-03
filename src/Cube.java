@@ -38,10 +38,40 @@ public class Cube implements Mesh{
         };
 
         edgeData = new int[][] {
+
+                //back face
+
                 //bottom back
                 {0,1},
+                //left back
+                {0,3},
                 //right back
                 {1,2},
+                //top back
+                {2,3},
+
+                //front face
+
+                //bottom front
+                {4,5},
+                //left front
+                {4,7},
+                //right front
+                {5,6},
+                //top front
+                {6,7},
+
+                //connecting pieces/side faces
+
+                //left bot side
+                {0,4},
+                //right bot side
+                {1,5},
+                //left top side
+                {3,7},
+                //right top side
+                {2,6}
+
         };
     }
 
