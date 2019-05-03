@@ -1,10 +1,13 @@
 public class Plane implements Mesh{
-    private ProjectVertex[] Vertices;
-    private ProjectEdge[] Edges;
+    private ProjectVertex[] vertices;
+    private ProjectEdge[] edges;
+    private float width, height;
 
     //creates a plane perpendicular to the z-axis, with lower left corner on origin, with appropriate length and width
     public Plane() {
-        Vertices = new ProjectVertex[] {
+        this.width = 1;
+        this.height = 1;
+        vertices = new ProjectVertex[] {
                 //Bottom Left
                 new ProjectVertex(0,0,0),
                 //Bottom Right
@@ -15,20 +18,22 @@ public class Plane implements Mesh{
                 new ProjectVertex(1, 1, 0)
         };
 
-        Edges = new ProjectEdge[] {
+        edges = new ProjectEdge[] {
                 //Left
-                new ProjectEdge(Vertices[0],Vertices[2]),
+                new ProjectEdge(vertices[0], vertices[2]),
                 //Right
-                new ProjectEdge(Vertices[1],Vertices[3]),
+                new ProjectEdge(vertices[1], vertices[3]),
                 //Top
-                new ProjectEdge(Vertices[2],Vertices[3]),
+                new ProjectEdge(vertices[2], vertices[3]),
                 //Bottom
-                new ProjectEdge(Vertices[0],Vertices[1])
+                new ProjectEdge(vertices[0], vertices[1])
         };
     }
 
     public Plane(float width, float height) {
-        Vertices = new ProjectVertex[] {
+        this.width = width;
+        this.height = height;
+        vertices = new ProjectVertex[] {
                 //Bottom Left
                 new ProjectVertex(0,0,0),
                 //Bottom Right
@@ -39,30 +44,37 @@ public class Plane implements Mesh{
                 new ProjectVertex(1*width, 1*height, 0)
         };
 
-        Edges = new ProjectEdge[] {
+        edges = new ProjectEdge[] {
                 //Left
-                new ProjectEdge(Vertices[0],Vertices[2]),
+                new ProjectEdge(vertices[0], vertices[2]),
                 //Right
-                new ProjectEdge(Vertices[1],Vertices[3]),
+                new ProjectEdge(vertices[1], vertices[3]),
                 //Top
-                new ProjectEdge(Vertices[2],Vertices[3]),
+                new ProjectEdge(vertices[2], vertices[3]),
                 //Bottom
-                new ProjectEdge(Vertices[0],Vertices[1])
+                new ProjectEdge(vertices[0], vertices[1])
         };
     }
 
-    public void Rotate(float degrees)
+    public void makeUpright()
     {
 
     }
 
+    //z as forward, move forward
+    public void translateZ(float amount){
+        for(ProjectVertex vertex : vertices) {
+            vertex.setZ(vertex.getZ() + amount);
+        }
+    }
+
     @Override
     public ProjectVertex[] getVertices() {
-        return Vertices;
+        return vertices;
     }
 
     @Override
     public ProjectEdge[] getEdges() {
-        return Edges;
+        return edges;
     }
 }

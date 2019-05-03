@@ -21,4 +21,17 @@ public class ProjectVertex {
         return coordinates[2];
     }
 
+    public void setX(float x)
+    {
+        this.coordinates[0] = x;
+    }
+    public void setY(float y)
+    {
+        this.coordinates[1] = y;
+    }
+    public void setZ(float z)
+    {
+        this.coordinates[2] = z;
+    }
+
 }
