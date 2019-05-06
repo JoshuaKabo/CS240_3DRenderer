@@ -5,6 +5,6 @@ public interface Mesh {
      */
     public ProjectVertex[] getVertices();
 
-    public ProjectEdge[] getEdges();
+    public int[][] getEdges();
 
 }

@@ -77,11 +77,11 @@ public class Cube implements Mesh{
 
     @Override
     public ProjectVertex[] getVertices() {
-        return new ProjectVertex[0];
+        return vertices;
     }
 
     @Override
-    public ProjectEdge[] getEdges() {
-        return new ProjectEdge[0];
+    public int[][] getEdges() {
+        return edgeData;
     }
 }

@@ -74,7 +74,7 @@ public class Plane implements Mesh{
     }
 
     @Override
-    public ProjectEdge[] getEdges() {
-        return edges;
+    public int[][] getEdges() {
+        return new int [0][0];
     }
 }

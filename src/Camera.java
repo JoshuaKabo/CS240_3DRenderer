@@ -1,3 +1,7 @@
+import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.GL4;
+import com.jogamp.opengl.GLAutoDrawable;
+
 import java.util.ArrayList;
 
 public class Camera {
@@ -22,13 +26,13 @@ public class Camera {
     }
     */
 
-    public void draw(Scene s)
+    public void draw(Scene s, GLAutoDrawable glAutoDrawable)
     {
-        ArrayList<ProjectVertex> projectedVertices = new ArrayList<>();
         //this is n^2, might want to use a faster algorithm if possible
         Mesh[] meshes = s.getMeshes();
         for(Mesh mesh : meshes)
         {
+            ArrayList<ProjectVertex> projectedVertices = new ArrayList<>();
             ProjectVertex[] vertices = mesh.getVertices();
             for(ProjectVertex vertex : vertices) {
                 projectedVertices.add( new ProjectVertex(
@@ -36,11 +40,24 @@ public class Camera {
                         (planeDist * (vertex.getX()/planeDist) ),
                         planeDist) );
             }
+            connectProjectedVertices(glAutoDrawable, (ProjectVertex[]) projectedVertices.toArray(), mesh.getEdges());
         }
     }
 
-    private void connectProjectedVertices() {
+    private void connectProjectedVertices(GLAutoDrawable glAutoDrawable, ProjectVertex[] projectedVertices, int[][] edges) {
+        GL2 gl = glAutoDrawable.getGL().getGL2();
+        gl.glClear(GL4.GL_COLOR_BUFFER_BIT | GL4.GL_DEPTH_BUFFER_BIT);
 
+        gl.glColor3f(1.0f, 1.0f, 1.0f );
+        gl.glLineWidth(2f);
+        gl.glBegin(GL2.GL_LINES);
+
+        for (int i = 0; i < edges.length; i++) {
+            gl.glVertex3f( projectedVertices[edges[i][0]].getX(), projectedVertices[edges[i][1]].getY(), 0.0f );
+        }
+
+        gl.glEnd();
+        gl.glFlush();
     }
 
 }

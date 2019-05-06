@@ -1,6 +1,13 @@
+import java.util.ArrayList;
+
 public class Scene {
+    private ArrayList<Mesh> Meshes;
+    public Scene(Mesh m)
+    {
+        Meshes.add(m);
+    }
     public Mesh[] getMeshes()
     {
-        return new Mesh[0];
+        return (Mesh[])Meshes.toArray();
     }
 }
