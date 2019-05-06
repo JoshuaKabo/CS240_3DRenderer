@@ -4,10 +4,11 @@ public class Scene {
     private ArrayList<Mesh> Meshes;
     public Scene(Mesh m)
     {
+        Meshes = new ArrayList<>();
         Meshes.add(m);
     }
-    public Mesh[] getMeshes()
+    public ArrayList<Mesh> getMeshes()
     {
-        return (Mesh[])Meshes.toArray();
+        return Meshes;
     }
 }

@@ -98,6 +98,13 @@ public class Main extends JFrame implements GLEventListener {
         //gl.glEnd();
 
         //gl.glFlush();
+
+        Cube cu = new Cube();
+        Scene s = new Scene(cu);
+        Camera c = new Camera();
+        c.draw(s, glAutoDrawable);
+
+
     }
 
     @Override

@@ -16,13 +16,13 @@ public class Cube implements Mesh{
                 //back face
 
                 //left, bottom, back
-                new ProjectVertex(-1, -1, z+1),
+                new ProjectVertex(-2, -2, z+1),
                 //right, bottom, back
-                new ProjectVertex(1, -1, z+1),
+                new ProjectVertex(2, -2, z+1),
                 //right, top, back
-                new ProjectVertex(1, 1, z+1),
+                new ProjectVertex(2, 2, z+1),
                 //left, top, back
-                new ProjectVertex(-1, 1, z+1),
+                new ProjectVertex(-2, 2, z+1),
 
 
                 //front face
