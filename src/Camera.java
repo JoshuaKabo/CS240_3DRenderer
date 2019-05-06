@@ -12,7 +12,7 @@ public class Camera {
     private float planeDist;
     public Camera()
     {
-        this.camDimensions = new ProjectVertex(6f,6f,-5f);
+        this.camDimensions = new ProjectVertex(6f,6f,5f);
         this.location = new ProjectVertex(0f,0f,0f);
         viewingPlane = new Plane(camDimensions.getX(), camDimensions.getY());
         viewingPlane.translateZ(camDimensions.getZ());
