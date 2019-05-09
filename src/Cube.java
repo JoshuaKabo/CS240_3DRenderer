@@ -1,87 +1,35 @@
-import com.jogamp.graph.geom.Vertex;
-import com.jogamp.nativewindow.util.Point;
+public class Cube extends Mesh {
+    public Cube(float l) {
+        float l2 = l / 2;
+        localMat = Matrix.translationMatrix(-l2, -l2, -l2);
 
-public class Cube implements Mesh{
-    private ProjectVertex[] vertices;
-    //[i][j]
-    //[i] represents the edge
-    //[j] represents the vertex numbers connected
-    private int[][] edgeData;
-    private float z = 10f;
+        vertices = new Vertex3D[] {
+            new Vertex3D(0, 0, 0),
+            new Vertex3D(0, l, 0),
+            new Vertex3D(l, l, 0),
+            new Vertex3D(l, 0, 0),
 
-    //I want its origin at (0,0,z)
-    public Cube() {
-        vertices = new ProjectVertex[] {
-
-                //back face
-
-                //left, bottom, back
-                new ProjectVertex(-1, -1, z+1),
-                //right, bottom, back
-                new ProjectVertex(1, -1, z+1),
-                //right, top, back
-                new ProjectVertex(1, 1, z+1),
-                //left, top, back
-                new ProjectVertex(-1, 1, z+1),
-
-
-                //front face
-
-                //left, bottom, front
-                new ProjectVertex(-1, -1, z-1),
-                //right, bottom, front
-                new ProjectVertex(1, -1, z-1),
-                //right, top, front
-                new ProjectVertex(1, 1, z-1),
-                //left, top, front
-                new ProjectVertex(-1, 1, z-1),
+            new Vertex3D(0, 0, l),
+            new Vertex3D(0, l, l),
+            new Vertex3D(l, l, l),
+            new Vertex3D(l, 0, l)
         };
 
-        edgeData = new int[][] {
+        edges = new Edge3D[] {
+            new Edge3D(vertices[0], vertices[1]),
+            new Edge3D(vertices[1], vertices[2]),
+            new Edge3D(vertices[2], vertices[3]),
+            new Edge3D(vertices[3], vertices[0]),
 
-                //back face
+            new Edge3D(vertices[4], vertices[5]),
+            new Edge3D(vertices[5], vertices[6]),
+            new Edge3D(vertices[6], vertices[7]),
+            new Edge3D(vertices[7], vertices[4]),
 
-                //bottom back
-                {0,1},
-                //left back
-                {0,3},
-                //right back
-                {1,2},
-                //top back
-                {2,3},
-
-                //front face
-
-                //bottom front
-                {4,5},
-                //left front
-                {4,7},
-                //right front
-                {5,6},
-                //top front
-                {6,7},
-
-                //connecting pieces/side faces
-
-                //left bot side
-                {0,4},
-                //right bot side
-                {1,5},
-                //left top side
-                {3,7},
-                //right top side
-                {2,6}
-
+            new Edge3D(vertices[0], vertices[4]),
+            new Edge3D(vertices[1], vertices[5]),
+            new Edge3D(vertices[2], vertices[6]),
+            new Edge3D(vertices[3], vertices[7]),
         };
-    }
-
-    @Override
-    public ProjectVertex[] getVertices() {
-        return vertices;
-    }
-
-    @Override
-    public int[][] getEdges() {
-        return edgeData;
     }
 }

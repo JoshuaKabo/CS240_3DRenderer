@@ -1,165 +1,164 @@
-//Credit to https://introcs.cs.princeton.edu/java/95linear/Matrix.java.html
-final public class Matrix {
-    private final int M;             // number of rows
-    private final int N;             // number of columns
-    private final double[][] data;   // M-by-N array
+public class Matrix {
+    public float[][] m;
+    private int rows, cols;
 
-    // create M-by-N matrix of 0's
-    public Matrix(int M, int N) {
-        this.M = M;
-        this.N = N;
-        data = new double[M][N];
+//    public static Matrix rotMatrix(float alpha, float beta, float gamma) {
+//        Matrix mat = Matrix.rotMatrixX(alpha);
+//        mat = mat.multiply(Matrix.rotMatrixY(beta));
+//        mat = mat.multiply(Matrix.rotMatrixZ(gamma));
+//        mat.m = new float[][] {
+//                new float[] { (float) Math.cos(theta), -(float)Math.sin(theta), 0 },
+//                new float[] { (float) Math.sin(theta), (float)Math.cos(theta), 0 },
+//                new float[] { 0, 0, 1 },
+//        };
+//        return mat;
+//    }
+
+    public Matrix(int rows, int cols) {
+        this.rows = rows;
+        this.cols = cols;
+//        System.out.println(rows + ", " + cols);
+        m = new float[rows][cols];
     }
 
-    // create matrix based on 2d array
-    public Matrix(double[][] data) {
-        M = data.length;
-        N = data[0].length;
-        this.data = new double[M][N];
-        for (int i = 0; i < M; i++)
-            for (int j = 0; j < N; j++)
-                this.data[i][j] = data[i][j];
+    public Matrix(Vertex3D vert) {
+        this(4, 1);
+        m[0][0] = vert.getX();
+        m[1][0] = vert.getY();
+        m[2][0] = vert.getZ();
+        m[3][0] = 1;
     }
 
-    // copy constructor
-    private Matrix(Matrix A) {
-        this(A.data);
+    public Matrix(Matrix mat) {
+        this(mat.getRows(), mat.getCols());
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                m[i][j] = mat.getVal(i, j);
+            }
+        }
     }
 
-    // create and return a random M-by-N matrix with values between 0 and 1
-    public static Matrix random(int M, int N) {
-        Matrix A = new Matrix(M, N);
-        for (int i = 0; i < M; i++)
-            for (int j = 0; j < N; j++)
-                A.data[i][j] = Math.random();
-        return A;
-    }
+    public Matrix multiply(Matrix other) {
 
-    // create and return the N-by-N identity matrix
-    public static Matrix identity(int N) {
-        Matrix I = new Matrix(N, N);
-        for (int i = 0; i < N; i++)
-            I.data[i][i] = 1;
-        return I;
-    }
+        //this.cols = 3
+        //this.rows = 3
+        //other.cols = 1
+        //other.rows = 3
+        if (cols != other.getRows()) {
+            return null;
+        }
 
-    // swap rows i and j
-    private void swap(int i, int j) {
-        double[] temp = data[i];
-        data[i] = data[j];
-        data[j] = temp;
-    }
+//        System.out.println(other.getCols());
 
-    // create and return the transpose of the invoking matrix
-    public Matrix transpose() {
-        Matrix A = new Matrix(N, M);
-        for (int i = 0; i < M; i++)
-            for (int j = 0; j < N; j++)
-                A.data[j][i] = this.data[i][j];
-        return A;
-    }
-
-    // return C = A + B
-    public Matrix plus(Matrix B) {
-        Matrix A = this;
-        if (B.M != A.M || B.N != A.N) throw new RuntimeException("Illegal matrix dimensions.");
-        Matrix C = new Matrix(M, N);
-        for (int i = 0; i < M; i++)
-            for (int j = 0; j < N; j++)
-                C.data[i][j] = A.data[i][j] + B.data[i][j];
-        return C;
-    }
-
-
-    // return C = A - B
-    public Matrix minus(Matrix B) {
-        Matrix A = this;
-        if (B.M != A.M || B.N != A.N) throw new RuntimeException("Illegal matrix dimensions.");
-        Matrix C = new Matrix(M, N);
-        for (int i = 0; i < M; i++)
-            for (int j = 0; j < N; j++)
-                C.data[i][j] = A.data[i][j] - B.data[i][j];
-        return C;
-    }
-
-    // does A = B exactly?
-    public boolean eq(Matrix B) {
-        Matrix A = this;
-        if (B.M != A.M || B.N != A.N) throw new RuntimeException("Illegal matrix dimensions.");
-        for (int i = 0; i < M; i++)
-            for (int j = 0; j < N; j++)
-                if (A.data[i][j] != B.data[i][j]) return false;
-        return true;
-    }
-
-    // return C = A * B
-    public Matrix times(Matrix B) {
-        Matrix A = this;
-        if (A.N != B.M) throw new RuntimeException("Illegal matrix dimensions.");
-        Matrix C = new Matrix(A.M, B.N);
-        for (int i = 0; i < C.M; i++)
-            for (int j = 0; j < C.N; j++)
-                for (int k = 0; k < A.N; k++)
-                    C.data[i][j] += (A.data[i][k] * B.data[k][j]);
-        return C;
-    }
-
-
-    // return x = A^-1 b, assuming A is square and has full rank
-    public Matrix solve(Matrix rhs) {
-        if (M != N || rhs.M != N || rhs.N != 1)
-            throw new RuntimeException("Illegal matrix dimensions.");
-
-        // create copies of the data
-        Matrix A = new Matrix(this);
-        Matrix b = new Matrix(rhs);
-
-        // Gaussian elimination with partial pivoting
-        for (int i = 0; i < N; i++) {
-
-            // find pivot row and swap
-            int max = i;
-            for (int j = i + 1; j < N; j++)
-                if (Math.abs(A.data[j][i]) > Math.abs(A.data[max][i]))
-                    max = j;
-            A.swap(i, max);
-            b.swap(i, max);
-
-            // singular
-            if (A.data[i][i] == 0.0) throw new RuntimeException("Matrix is singular.");
-
-            // pivot within b
-            for (int j = i + 1; j < N; j++)
-                b.data[j][0] -= b.data[i][0] * A.data[j][i] / A.data[i][i];
-
-            // pivot within A
-            for (int j = i + 1; j < N; j++) {
-                double m = A.data[j][i] / A.data[i][i];
-                for (int k = i + 1; k < N; k++) {
-                    A.data[j][k] -= A.data[i][k] * m;
+        Matrix result = new Matrix(rows, other.getCols());
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < other.getCols(); j++) {
+//                System.out.println(i + ", " + j);
+                float sum = 0;
+                for (int k = 0; k < cols; k++) {
+                    sum += m[i][k] * other.getVal(k, j);
                 }
-                A.data[j][i] = 0.0;
+                result.setVal(i, j, sum);
             }
         }
 
-        // back substitution
-        Matrix x = new Matrix(N, 1);
-        for (int j = N - 1; j >= 0; j--) {
-            double t = 0.0;
-            for (int k = j + 1; k < N; k++)
-                t += A.data[j][k] * x.data[k][0];
-            x.data[j][0] = (b.data[j][0] - t) / A.data[j][j];
-        }
-        return x;
-
+        return result;
     }
 
-    // print matrix to standard output
-    public void show() {
-        for (int i = 0; i < M; i++) {
-            for (int j = 0; j < N; j++)
-                System.out.printf("%9.4f ", data[i][j]);
-            System.out.println();
+    public Matrix multiplyScalar(float k) {
+        Matrix mat = new Matrix(this);
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                mat.setVal(i, j, k * mat.getVal(i, j));
+            }
         }
+        return mat;
+    }
+
+    public Vertex3D multiplyVert(Vertex3D other) {
+//        System.out.println(this);
+        Matrix vm = new Matrix(other);
+//        System.out.println(vm);
+        Matrix tmp = this.multiply(vm);
+//        System.out.println(tmp);
+        return new Vertex3D(tmp.getVal(0, 0), tmp.getVal(1, 0), tmp.getVal(2, 0));
+    }
+
+    public void setVal(int row, int col, float val) {
+        m[row][col] = val;
+    }
+
+    public float getVal(int row, int col) {
+        return m[row][col];
+    }
+
+    public int getRows() {
+        return rows;
+    }
+
+    public int getCols() {
+        return cols;
+    }
+
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("[\n");
+        for (int i = 0; i < rows; i++) {
+            sb.append("\t[ ");
+            for (int j = 0; j < cols; j++) {
+                sb.append(m[i][j]);
+                if (j < cols - 1) {
+                    sb.append(",");
+                }
+                sb.append(" ");
+            }
+            sb.append("] \n");
+        }
+        sb.append("]\n");
+        return sb.toString();
+    }
+
+    public static Matrix rotXMatrix(float theta) {
+        Matrix mat = new Matrix(4, 4);
+        mat.m = new float[][] {
+                new float[] { 1, 0, 0, 0 },
+                new float[] { 0, (float) Math.cos(theta), (float)Math.sin(theta), 0, 0 },
+                new float[] { 0, -(float) Math.sin(theta), (float)Math.cos(theta), 0, 0 },
+                new float[] { 0, 0, 0, 1 },
+        };
+        return mat;
+    }
+
+    public static Matrix rotYMatrix(float theta) {
+        Matrix mat = new Matrix(4, 4);
+        mat.m = new float[][] {
+                new float[] { (float) Math.cos(theta), 0, -(float)Math.sin(theta), 0 },
+                new float[] { 0, 1, 0, 0 },
+                new float[] { (float) Math.sin(theta), 0, (float)Math.cos(theta), 0 },
+                new float[] { 0, 0, 0, 1 },
+        };
+        return mat;
+    }
+
+    public static Matrix rotZMatrix(float theta) {
+        Matrix mat = new Matrix(4, 4);
+        mat.m = new float[][] {
+                new float[] { (float) Math.cos(theta), (float)Math.sin(theta), 0, 0 },
+                new float[] { -(float) Math.sin(theta), (float)Math.cos(theta), 0, 0 },
+                new float[] { 0, 0, 1, 0 },
+                new float[] { 0, 0, 0, 1 },
+        };
+        return mat;
+    }
+
+    public static Matrix translationMatrix(float x, float y, float z) {
+        Matrix mat = new Matrix(4, 4);
+        mat.m = new float[][] {
+                new float[] { 1, 0, 0, x},
+                new float[] { 0, 1, 0, y },
+                new float[] { 0, 0, 1, z },
+                new float[] { 0, 0, 0, 1 },
+        };
+        return mat;
     }
 }
