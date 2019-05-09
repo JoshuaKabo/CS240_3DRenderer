@@ -1,14 +1,35 @@
-import com.jogamp.graph.geom.Vertex;
-import com.jogamp.nativewindow.util.Point;
+public class Cube extends Mesh {
+    public Cube(float l) {
+        float l2 = l / 2;
+        localMat = Matrix.translationMatrix(-l2, -l2, -l2);
 
-public class Cube implements Mesh{
-    private ProjectVertex vertex1 = new ProjectVertex(-1f, 1f,-1f);
-    private ProjectVertex vertex2 = new ProjectVertex(-1f,-1f,-1f);
-    private ProjectVertex vertex3 = new ProjectVertex(-1f,-1f,-1f);
-    private ProjectVertex vertex4 = new ProjectVertex(-1f,-1f,-1f);
+        vertices = new Vertex3D[] {
+            new Vertex3D(0, 0, 0),
+            new Vertex3D(0, l, 0),
+            new Vertex3D(l, l, 0),
+            new Vertex3D(l, 0, 0),
 
-    @Override
-    public ProjectVertex[] getVertices() {
-        return new ProjectVertex[0];
+            new Vertex3D(0, 0, l),
+            new Vertex3D(0, l, l),
+            new Vertex3D(l, l, l),
+            new Vertex3D(l, 0, l)
+        };
+
+        edges = new Edge3D[] {
+            new Edge3D(vertices[0], vertices[1]),
+            new Edge3D(vertices[1], vertices[2]),
+            new Edge3D(vertices[2], vertices[3]),
+            new Edge3D(vertices[3], vertices[0]),
+
+            new Edge3D(vertices[4], vertices[5]),
+            new Edge3D(vertices[5], vertices[6]),
+            new Edge3D(vertices[6], vertices[7]),
+            new Edge3D(vertices[7], vertices[4]),
+
+            new Edge3D(vertices[0], vertices[4]),
+            new Edge3D(vertices[1], vertices[5]),
+            new Edge3D(vertices[2], vertices[6]),
+            new Edge3D(vertices[3], vertices[7]),
+        };
     }
 }
