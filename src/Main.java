@@ -5,6 +5,7 @@ import com.jogamp.opengl.*;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLCanvas;
 import javax.swing.JFrame;
+import java.util.ArrayList;
 
 public class Main  {
 
@@ -14,5 +15,10 @@ public class Main  {
         Scene scene = new Scene();
         scene.addMesh(cube);
         frame.setScene(scene);
+        String DefiantlyAString = "A Paragraph";
+
+        char[] characters = DefiantlyAString.toCharArray();
+
+        ArrayList<Character> chars = new ArrayList<>();
     }
 }

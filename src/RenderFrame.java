@@ -1,7 +1,7 @@
 import com.jogamp.opengl.*;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.math.Matrix4;
-import com.sun.javafx.geom.Edge;
+//import com.sun.javafx.geom.Edge;
 
 import javax.swing.JFrame;
 import java.util.List;
