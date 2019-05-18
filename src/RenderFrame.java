@@ -68,7 +68,7 @@ public class RenderFrame extends JFrame implements GLEventListener {
             for (WorldObject object: objects) {
                 Mesh mesh = object.getMesh();
                 Matrix modelMat = object.getModelMatrix();
-                System.out.println(modelMat);
+                //System.out.println(modelMat);
 
                 for (Edge3D edge : mesh.getEdges()) {
                     Vertex3D v1 = edge.getVertex1();
@@ -90,10 +90,10 @@ public class RenderFrame extends JFrame implements GLEventListener {
                     float z2 = v2.getZ();
                     float x2 = v2.getX() / z2;
                     float y2 = v2.getY() / z2;
-
-                    System.out.println(String.format("[%f.2, %f.2, %f.2]", x1, y1, z1));
-                    System.out.println(String.format("[%f.2, %f.2, %f.2]", x2, y2, z2));
-                    System.out.println();
+//
+//                    System.out.println(String.format("[%f.2, %f.2, %f.2]", x1, y1, z1));
+//                    System.out.println(String.format("[%f.2, %f.2, %f.2]", x2, y2, z2));
+//                    System.out.println();
 
                     canvas.strokeLine(x1, y1, x2, y2);
                 }
