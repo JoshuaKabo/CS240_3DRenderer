@@ -8,13 +8,7 @@ import java.util.Vector;
 public class Obj {
     private File objFile;
     private Scanner s;
-    private ArrayList<Vertex3D> vertices = new ArrayList<>();
-
-    /*
-    So, if I use an arraylist of arraylists, the rows represent the vertices, and the columns are the links
-
-    I may want to create a specialized class, to hold the location itself, and it's own linked list to hold connections
-     */
+    private GeometryGraph geoGraph = new GeometryGraph();
 
     public Obj(String fileName) throws FileNotFoundException {
 
@@ -27,20 +21,28 @@ public class Obj {
             String currentLine = s.nextLine();
             //make sure it's not not empty
             if(currentLine.length() > 0) {
-                //if it's a vertex
+                //if it's a vertex. This part sets up the vertices of the graph
                 if (currentLine.substring(0, 2).equals("v ")) {
+                    //convert the string to a Vertex3D
                     currentLine = currentLine.substring(2, currentLine.length());
                     String[] rawNumbers = currentLine.split(" ");
                     float[] axisAmounts = new float[rawNumbers.length];
                     for (int i = 0; i < rawNumbers.length; i++) {
                         axisAmounts[i] = Float.parseFloat(rawNumbers[i]);
                     }
-                    vertices.add(new Vertex3D(axisAmounts[0], axisAmounts[1], axisAmounts[2]));
+                    geoGraph.add(new GraphVertex3D(axisAmounts[0], axisAmounts[1], axisAmounts[2]));
                 }
-                //if its a face
+                //if its a face, this part sets up the edges of the graph
                 else if (currentLine.substring(0, 2).equals("f ")) {
                     currentLine = currentLine.substring(2, currentLine.length());
-
+                    String[] rawEdges = currentLine.split(" ");
+                    //now I have an array of strings that look like this: {"1//1","2//1"}
+                    for (int i = 0; i < rawEdges.length; i++) {
+                        //this will make many arrays that look like this {1,1}, {2,1}
+                        String[] edgeStrings = rawEdges[i].split("//");
+                        //this will set up the actual edges between vertices in the graph
+                        geoGraph.link(Integer.parseInt(edgeStrings[0]), Integer.parseInt(edgeStrings[0]));
+                    }
                 }
             }
         }

@@ -11,7 +11,13 @@ public class GeometryGraph {
 
     private ArrayList<GraphVertex3D> vertices;
 
-    //public void add()
+    public GeometryGraph() {
+        vertices = new ArrayList<>();
+    }
+
+    public void add(GraphVertex3D v) {
+        vertices.add(v);
+    }
 
     public void link(int index1, int index2) {
         //get the actual vertices at those indices
