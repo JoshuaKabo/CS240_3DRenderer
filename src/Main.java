@@ -13,12 +13,13 @@ public class Main  {
 
     public static void main(String[] args) throws FileNotFoundException {
         RenderFrame frame = new RenderFrame(600, 600);
-        Cube cube = new Cube(1);
+//        Cube cube = new Cube(1);
+        Obj test = new Obj("suzanne.obj");
         Scene scene = new Scene();
-        scene.addMesh(cube);
+        scene.addMesh(test);
         frame.setScene(scene);
 
-        Obj test = new Obj("cube.obj");
+        //Obj test = new Obj("cube.obj");
 
     }
 }

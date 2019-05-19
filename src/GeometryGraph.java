@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class GeometryGraph {
 
@@ -11,8 +12,11 @@ public class GeometryGraph {
 
     private ArrayList<GraphVertex3D> vertices;
 
+    private int numEdges;
+
     public GeometryGraph() {
         vertices = new ArrayList<>();
+        numEdges = 0;
     }
 
     public void add(GraphVertex3D v) {
@@ -26,6 +30,7 @@ public class GeometryGraph {
         //if neither of them is already linked, link them
         if(!vertex1.isLinkedTo(index2) && !vertex2.isLinkedTo(index1)) {
             vertices.get(index1).link(index2);
+            numEdges++;
         }
     }
 
@@ -38,6 +43,7 @@ public class GeometryGraph {
             //if neither is already linked, link them
             if(!vertex1.isLinkedTo(index2) && !vertex2.isLinkedTo(index1)) {
                 vertices.get(index1).link(index2);
+                numEdges++;
             }
         }
         //if there was a null pointer exception, then a vertex wasn't found
@@ -45,5 +51,29 @@ public class GeometryGraph {
             System.out.println("Vertex not found");
         }
 
+    }
+
+    public Vertex3D[] getVertices() {
+        return (Vertex3D[])vertices.toArray();
+    }
+
+    //this is a little clumsy because I didn't want to create an arraylist and convert to an array, which would have
+    //been cleaner
+    public Edge3D[] getEdges() {
+        Edge3D[] edges = new Edge3D[numEdges];
+        int arrayCursor = 0;
+        int verticesSize = vertices.size();
+        for (int i = 0; i < verticesSize; i++) {
+            //if there's a connection there, add it to the edge array
+            LinkedList<Integer> adjacent = vertices.get(i).getAdjacentVertices();
+            if(adjacent.size() > 0) {
+                //convert the indices to their actual vertices
+                Vertex3D v1 = vertices.get(adjacent.get(0));
+                Vertex3D v2 = vertices.get(adjacent.get(1));
+                edges[arrayCursor] = new Edge3D(v1,v2);
+                arrayCursor++;
+            }
+        }
+        return edges;
     }
 }

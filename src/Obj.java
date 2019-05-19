@@ -5,12 +5,15 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Vector;
 
-public class Obj {
+public class Obj extends Mesh {
     private File objFile;
     private Scanner s;
     private GeometryGraph geoGraph = new GeometryGraph();
 
+
     public Obj(String fileName) throws FileNotFoundException {
+        float l2 = 1 / 2;
+        localMat = Matrix.translationMatrix(-l2, -l2, -l2);
 
         objFile = new File(fileName);
         s = new Scanner(objFile);
@@ -41,10 +44,18 @@ public class Obj {
                         //this will make many arrays that look like this {1,1}, {2,1}
                         String[] edgeStrings = rawEdges[i].split("//");
                         //this will set up the actual edges between vertices in the graph
-                        geoGraph.link(Integer.parseInt(edgeStrings[0]), Integer.parseInt(edgeStrings[0]));
+                        geoGraph.link(Integer.parseInt(edgeStrings[0]), Integer.parseInt(edgeStrings[1]));
                     }
                 }
             }
         }
+    }
+
+    public Vertex3D[] getVertices() {
+        return geoGraph.getVertices();
+    }
+    @Override
+    public Edge3D[] getEdges() {
+        return new Edge3D[7];
     }
 }
