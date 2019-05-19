@@ -2,7 +2,7 @@ import java.util.LinkedList;
 
 public class GraphVertex3D extends Vertex3D {
 
-    private LinkedList<Integer> adjacentVertices;
+    private LinkedList<Integer> adjacentVertices = new LinkedList<>();
 
     public GraphVertex3D() {
         this(0, 0, 0);
@@ -21,7 +21,10 @@ public class GraphVertex3D extends Vertex3D {
 
     //checks the list to see if it's already linked to that vertex
     public boolean isLinkedTo(int neighbor) {
-        return adjacentVertices.contains(neighbor);
+        if(adjacentVertices != null) {
+            return adjacentVertices.contains(neighbor);
+        }
+        else return false;
     }
 
     public LinkedList<Integer> getAdjacentVertices()

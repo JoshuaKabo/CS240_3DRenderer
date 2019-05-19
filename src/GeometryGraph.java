@@ -54,7 +54,13 @@ public class GeometryGraph {
     }
 
     public Vertex3D[] getVertices() {
-        return (Vertex3D[])vertices.toArray();
+        //toArray had different casting problems, so I'm going to do it manually
+        //return (Vertex3D[])vertices.toArray();
+        Vertex3D[] returnVertices = new Vertex3D[vertices.size()];
+        for (int i = 0; i < returnVertices.length; i++) {
+            returnVertices[i] = vertices.get(i);
+        }
+        return returnVertices;
     }
 
     //this is a little clumsy because I didn't want to create an arraylist and convert to an array, which would have

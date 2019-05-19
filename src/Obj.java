@@ -27,7 +27,7 @@ public class Obj extends Mesh {
                 //if it's a vertex. This part sets up the vertices of the graph
                 if (currentLine.substring(0, 2).equals("v ")) {
                     //convert the string to a Vertex3D
-                    currentLine = currentLine.substring(2, currentLine.length());
+                    currentLine = currentLine.substring(2);
                     String[] rawNumbers = currentLine.split(" ");
                     float[] axisAmounts = new float[rawNumbers.length];
                     for (int i = 0; i < rawNumbers.length; i++) {
@@ -37,14 +37,21 @@ public class Obj extends Mesh {
                 }
                 //if its a face, this part sets up the edges of the graph
                 else if (currentLine.substring(0, 2).equals("f ")) {
-                    currentLine = currentLine.substring(2, currentLine.length());
+                    currentLine = currentLine.substring(2);
                     String[] rawEdges = currentLine.split(" ");
                     //now I have an array of strings that look like this: {"1//1","2//1"}
-                    for (int i = 0; i < rawEdges.length; i++) {
-                        //this will make many arrays that look like this {1,1}, {2,1}
-                        String[] edgeStrings = rawEdges[i].split("//");
-                        //this will set up the actual edges between vertices in the graph
-                        geoGraph.link(Integer.parseInt(edgeStrings[0]), Integer.parseInt(edgeStrings[1]));
+
+                    //to -1 to prevent oob
+                    for (int i = 0; i < rawEdges.length-1; i+=2) {
+
+                        //grab just the vertex, ignoring the normal, then make an edge
+                        String[] vertexAndNormal = rawEdges[i].split("//");
+                        int v1 = Integer.parseInt(vertexAndNormal[0]);
+                        String[] vertexAndNormal2 = rawEdges[i+1].split("//");
+                        int v2 = Integer.parseInt(vertexAndNormal2[0]);
+
+                        //subtract one, because 0 is the storage base
+                        geoGraph.link(v1-1, v2-1);
                     }
                 }
             }
@@ -54,8 +61,8 @@ public class Obj extends Mesh {
     public Vertex3D[] getVertices() {
         return geoGraph.getVertices();
     }
-    @Override
+
     public Edge3D[] getEdges() {
-        return new Edge3D[7];
+        return geoGraph.getEdges();
     }
 }

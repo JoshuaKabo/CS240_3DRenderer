@@ -10,7 +10,6 @@ class ObjTest {
     void getVertices() throws FileNotFoundException {
         Obj test = new Obj("cube.obj");
         assertEquals(new Vertex3D(-1,-1,1), test.getVertices()[0]);
-
     }
 
     @Test
