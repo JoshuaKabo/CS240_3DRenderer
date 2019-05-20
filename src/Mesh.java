@@ -12,7 +12,6 @@ public class Mesh {
         return vertices;
     }
 
-
     public Edge3D[] getEdges() {
         return edges;
     }

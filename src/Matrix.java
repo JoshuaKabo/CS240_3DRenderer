@@ -161,4 +161,15 @@ public class Matrix {
         };
         return mat;
     }
+
+    public static Matrix scaleMatrix(float sx, float sy, float sz) {
+        Matrix mat = new Matrix(4, 4);
+        mat.m = new float[][] {
+                new float[] { sx, 0, 0, 0},
+                new float[] { 0, sy, 0, 0 },
+                new float[] { 0, 0, sz, 0 },
+                new float[] { 0, 0, 0, 1 },
+        };
+        return mat;
+    }
 }

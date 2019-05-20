@@ -1,34 +1,41 @@
 public class WorldObject {
     private Mesh mesh;
-    private Matrix modelMat;
+    private Matrix translationMat;
+    private Matrix scaleRotMat;
 
     public WorldObject(Mesh mesh) {
-        this(mesh, Matrix.translationMatrix(0, 0, 0));
-    }
-
-    public WorldObject(Mesh mesh, Matrix modelMat) {
         this.mesh = mesh;
-        this.modelMat = modelMat;
+        translationMat = Matrix.translationMatrix(0, 0, 0);
+        scaleRotMat = Matrix.translationMatrix(0, 0, 0);
     }
 
     public Mesh getMesh() {
         return mesh;
     }
 
-    public Matrix getModelMatrix() {
-        Matrix meshLocalMat = mesh.getLocalMat();
+    public void applyTranslation(Matrix fnMat) {
+        translationMat = fnMat.multiply(translationMat);
+    }
 
-        if (meshLocalMat == null)
+    public void applyScaleRotation(Matrix fnMat) {
+        scaleRotMat = fnMat.multiply(scaleRotMat);
+    }
+
+    public Matrix getTranslationMat() {
+        return translationMat;
+    }
+
+    public Matrix getScaleRotMat() {
+        return scaleRotMat;
+    }
+
+    public Matrix getModelMat() {
+        Matrix modelMat = translationMat.multiply(scaleRotMat);
+        Matrix localMat = mesh.getLocalMat();
+        if (localMat == null) {
             return modelMat;
-        else
-            return modelMat.multiply(meshLocalMat);
-    }
-
-    public void applyTransformation(Matrix transMat) {
-        modelMat = transMat.multiply(transMat);
-    }
-
-    public void setModelMatrix(Matrix modelMat) {
-        this.modelMat = modelMat;
+        } else {
+            return modelMat.multiply(localMat);
+        }
     }
 }
