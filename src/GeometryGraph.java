@@ -30,6 +30,7 @@ public class GeometryGraph {
         //if neither of them is already linked, link them
         if(!vertex1.isLinkedTo(index2) && !vertex2.isLinkedTo(index1)) {
             vertices.get(index1).link(index2);
+
             numEdges++;
         }
     }
@@ -72,11 +73,9 @@ public class GeometryGraph {
         for (int i = 0; i < verticesSize; i++) {
             //if there's a connection there, add it to the edge array
             LinkedList<Integer> adjacent = vertices.get(i).getAdjacentVertices();
-            if(adjacent.size() > 0) {
-                //convert the indices to their actual vertices
-                Vertex3D v1 = vertices.get(adjacent.get(0));
-                Vertex3D v2 = vertices.get(adjacent.get(1));
-                edges[arrayCursor] = new Edge3D(v1,v2);
+            for (int j = 0; j < adjacent.size(); j++) {
+
+                edges[arrayCursor] = new Edge3D(vertices.get(i),vertices.get(adjacent.get(j)));
                 arrayCursor++;
             }
         }

@@ -13,7 +13,7 @@ public class Obj extends Mesh {
 
     public Obj(String fileName) throws FileNotFoundException {
         float l2 = 1 / 2;
-        localMat = Matrix.translationMatrix(-l2, -l2, -l2);
+        localMat = Matrix.translationMatrix(0, 0, 2);
 
         objFile = new File(fileName);
         s = new Scanner(objFile);
@@ -42,27 +42,30 @@ public class Obj extends Mesh {
                     //now I have an array of strings that look like this: {"1//1","2//1"}
 
                     //to -1 to prevent oob
-                    for (int i = 0; i < rawEdges.length-1; i+=2) {
+                    for (int i = 0; i < rawEdges.length-3; i+=4) {
 
                         //grab just the vertex, ignoring the normal, then make an edge
                         String[] vertexAndNormal = rawEdges[i].split("//");
                         int v1 = Integer.parseInt(vertexAndNormal[0]);
                         String[] vertexAndNormal2 = rawEdges[i+1].split("//");
                         int v2 = Integer.parseInt(vertexAndNormal2[0]);
+                        String[] vertexAndNormal3 = rawEdges[i+2].split("//");
+                        int v3 = Integer.parseInt(vertexAndNormal3[0]);
+                        String[] vertexAndNormal4 = rawEdges[i+3].split("//");
+                        int v4 = Integer.parseInt(vertexAndNormal4[0]);
 
                         //subtract one, because 0 is the storage base
                         geoGraph.link(v1-1, v2-1);
+                        geoGraph.link(v3-1, v4-1);
+                        //need to do extra links due to face data
+                        geoGraph.link(v2-1,v3-1);
+                        geoGraph.link(v1-1,v4-1);
                     }
                 }
             }
         }
-    }
 
-    public Vertex3D[] getVertices() {
-        return geoGraph.getVertices();
-    }
-
-    public Edge3D[] getEdges() {
-        return geoGraph.getEdges();
+        vertices = geoGraph.getVertices();
+        edges = geoGraph.getEdges();
     }
 }

@@ -97,3 +97,4 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 *.iml
 .idea/workspace.xml
+sphere.mtl
