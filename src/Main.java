@@ -24,8 +24,8 @@ public class Main  {
 
         //Obj test = new Obj("cube.obj");
 
-        glu.gluPerspective( 45.0f, h, 1.0, 20.0 );
-        gl.glMatrixMode( GL2.GL_MODELVIEW );
-        gl.glLoadIdentity();
+//        glu.gluPerspective( 45.0f, h, 1.0, 20.0 );
+//        gl.glMatrixMode( GL2.GL_MODELVIEW );
+//        gl.glLoadIdentity();
     }
 }

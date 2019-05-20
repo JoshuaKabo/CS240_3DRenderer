@@ -13,7 +13,7 @@ public class Obj extends Mesh {
 
     public Obj(String fileName) throws FileNotFoundException {
         float l2 = 1 / 2;
-        localMat = Matrix.translationMatrix(0, 0, 2);
+        localMat = Matrix.translationMatrix(0, 0, 0);
 
         objFile = new File(fileName);
         s = new Scanner(objFile);
