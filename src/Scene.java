@@ -9,7 +9,8 @@ public class Scene {
     }
 
     public void addMesh(Mesh mesh) {
-        WorldObject wo = new WorldObject(mesh, Matrix.translationMatrix(0, 0, 2f));
+        WorldObject wo = new WorldObject(mesh);
+        wo.applyTranslation(Matrix.translationMatrix(0, 0, -1.5f));
         objects.add(wo);
     }
 
