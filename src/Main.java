@@ -4,13 +4,11 @@ import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.*;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLCanvas;
-import com.jogamp.opengl.glu.GLU;
-import com.jogamp.opengl.util.FPSAnimator;
-
 import javax.swing.JFrame;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class Main  {
 
