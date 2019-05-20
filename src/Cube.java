@@ -32,9 +32,4 @@ public class Cube extends Mesh {
             new Edge3D(vertices[3], vertices[7]),
         };
     }
-
-    @Override
-    public ProjectEdge[] getEdges() {
-        return new ProjectEdge[0];
-    }
 }

@@ -1,16 +1,19 @@
 import com.jogamp.opengl.*;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.math.Matrix4;
-import com.sun.javafx.geom.Edge;
 
-import javax.swing.JFrame;
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.Random;
 
 public class RenderFrame extends JFrame implements GLEventListener {
     private int width;
     private int height;
     private float aspectRatio;
     private float angle = 0;
+    private int framecount = 0;
 
     private Scene scene;
 
@@ -40,8 +43,23 @@ public class RenderFrame extends JFrame implements GLEventListener {
 
     @Override
     public void init(GLAutoDrawable drawable) {
-//        GL2 gl = drawable.getGL().getGL2();
-//        gl.glClearColor(0.0f, 0.0f, 1f, 0.5f);
+        Timer timer = new Timer(30, new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                Matrix rotMat = Matrix.rotZMatrix((float) Math.sin(Math.toRadians(framecount) + 240) * 0.015f);
+                rotMat = rotMat.multiply(Matrix.rotXMatrix((float) Math.sin(Math.toRadians(framecount)) * 0.015f));
+                rotMat = rotMat.multiply(Matrix.rotYMatrix(0.01f));
+
+                if (scene != null) {
+                    List<WorldObject> objects = scene.getObjects();
+                    for (WorldObject object : objects) {
+                        object.applyScaleRotation(rotMat);
+                    }
+                }
+                drawable.display();
+                framecount++;
+            }
+        });
+        timer.start();
     }
 
     @Override
@@ -59,16 +77,26 @@ public class RenderFrame extends JFrame implements GLEventListener {
         canvas.setColor(1f, 1f, 1f, 0.5f);
         canvas.strokeWidth(2);
 
-//        Matrix rot = Matrix.rotXMatrix((float)Math.toRadians(angle));
 //        rot = rot.multiply(Matrix.rotYMatrix((float)Math.toRadians(angle + 60)));
-        Matrix rot = Matrix.rotZMatrix((float)Math.toRadians(angle + 45));
+//        Matrix rot = Matrix.rotZMatrix((float)Math.toRadians(angle + 45));
+
+        float scaleDim;
+        Matrix screenScale;
+        if (width > height) {
+            scaleDim = (float) height / width;
+            screenScale = Matrix.scaleMatrix(scaleDim,1, 1);
+        } else {
+            scaleDim = (float) width / height;
+            screenScale = Matrix.scaleMatrix(1, scaleDim, 1);
+        }
 
         if (scene != null) {
             List<WorldObject> objects = scene.getObjects();
             for (WorldObject object: objects) {
                 Mesh mesh = object.getMesh();
-                Matrix modelMat = object.getModelMatrix();
-                System.out.println(modelMat);
+                Matrix modelMat = object.getModelMat();
+
+                modelMat = screenScale.multiply(modelMat);
 
                 for (Edge3D edge : mesh.getEdges()) {
                     Vertex3D v1 = edge.getVertex1();
@@ -77,23 +105,13 @@ public class RenderFrame extends JFrame implements GLEventListener {
                     v1 = modelMat.multiplyVert(v1);
                     v2 = modelMat.multiplyVert(v2);
 
-                    v1 = rot.multiplyVert(v1);
-                    v2 = rot.multiplyVert(v2);
-
-//                    v1 = trans2.multiplyVert(v1);
-//                    v2 = trans2.multiplyVert(v2);
-
                     float z1 = v1.getZ();
-                    float x1 = v1.getX() / z1;
-                    float y1 = v1.getY() / z1;
+                    float x1 = v1.getX() / -z1;
+                    float y1 = v1.getY() / -z1;
 
                     float z2 = v2.getZ();
-                    float x2 = v2.getX() / z2;
-                    float y2 = v2.getY() / z2;
-
-                    System.out.println(String.format("[%f.2, %f.2, %f.2]", x1, y1, z1));
-                    System.out.println(String.format("[%f.2, %f.2, %f.2]", x2, y2, z2));
-                    System.out.println();
+                    float x2 = v2.getX() / -z2;
+                    float y2 = v2.getY() / -z2;
 
                     canvas.strokeLine(x1, y1, x2, y2);
                 }
@@ -106,10 +124,6 @@ public class RenderFrame extends JFrame implements GLEventListener {
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
         this.width = width;
         this.height = height;
-
-        aspectRatio = (float) this.width / this.height;
-
-        angle += 2.5;
     }
 
     public void setScene(Scene scene) {

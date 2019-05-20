@@ -40,4 +40,13 @@ public class Vertex3D {
     public String toString() {
         return String.format("[%f, %f, %f]", x, y, z);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        Vertex3D v =(Vertex3D)o;
+        if(v.x == x && v.y == y && v.z == z) {
+            return true;
+        }
+        else return false;
+    }
 }
