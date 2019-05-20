@@ -14,12 +14,21 @@ import java.util.List;
 
 public class Main  {
 
+    private static final String[] filenames = {
+            "suzanne.obj",
+            "cube.obj",
+            "crystals.obj",
+            "sphere.obj"
+    };
+
     public static void main(String[] args) throws FileNotFoundException {
         RenderFrame frame = new RenderFrame(600, 600);
-        //Cube cube = new Cube(1);
-        Obj test = new Obj("suzanne.obj");
+
+
         Scene scene = new Scene();
-        scene.addMesh(test);
+        for (String filename : filenames) {
+            scene.addMesh(new Obj(filename));
+        }
         frame.setScene(scene);
 
         //Obj test = new Obj("cube.obj");

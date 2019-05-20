@@ -5,10 +5,12 @@ import com.jogamp.opengl.math.Matrix4;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.List;
 import java.util.Random;
 
-public class RenderFrame extends JFrame implements GLEventListener {
+public class RenderFrame extends JFrame implements GLEventListener, KeyListener {
     private int width;
     private int height;
     private float aspectRatio;
@@ -30,6 +32,8 @@ public class RenderFrame extends JFrame implements GLEventListener {
 
         GLCanvas glCanvas = new GLCanvas(capabilities);
         glCanvas.addGLEventListener(this);
+        glCanvas.setFocusable(true);
+        glCanvas.addKeyListener(this);
 
         this.setSize(this.width, this.height);
         this.getContentPane().add(glCanvas);
@@ -91,8 +95,10 @@ public class RenderFrame extends JFrame implements GLEventListener {
         }
 
         if (scene != null) {
-            List<WorldObject> objects = scene.getObjects();
-            for (WorldObject object: objects) {
+//            List<WorldObject> objects = scene.getObjects();
+            WorldObject object = scene.peek();
+            if (object != null) {
+//            for (WorldObject object: objects) {
                 Mesh mesh = object.getMesh();
                 Matrix modelMat = object.getModelMat();
 
@@ -128,5 +134,22 @@ public class RenderFrame extends JFrame implements GLEventListener {
 
     public void setScene(Scene scene) {
         this.scene = scene;
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+//        char pressed = e.getKeyChar();
+//        System.out.println(pressed);
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        scene.enqueue(scene.dequeue());
+//        char pressed = e.getKeyChar();
+//        System.out.println(pressed);
     }
 }

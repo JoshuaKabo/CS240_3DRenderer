@@ -15,7 +15,7 @@ public class GraphVertex3D extends Vertex3D {
     }
 
     public void link(int toLink) {
-        System.out.println("Linktrack: " + ++linktrack);
+//        System.out.println("Linktrack: " + ++linktrack);
         //prevent storing a link that already exists
         if(!isLinkedTo(toLink)) {
             adjacentVertices.add(toLink);
@@ -24,7 +24,7 @@ public class GraphVertex3D extends Vertex3D {
 
     //checks the list to see if it's already linked to that vertex
     public boolean isLinkedTo(int neighbor) {
-        System.out.println("islink: " + ++islinkedtrack);
+//        System.out.println("islink: " + ++islinkedtrack);
         if(adjacentVertices != null) {
             return adjacentVertices.contains(neighbor);
         }
