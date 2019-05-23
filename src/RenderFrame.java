@@ -1,26 +1,46 @@
 import com.jogamp.opengl.*;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.math.Matrix4;
+import com.jogamp.opengl.util.awt.TextRenderer;
+
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.List;
 import java.util.Random;
 
-public class RenderFrame extends JFrame implements GLEventListener, KeyListener {
+public class RenderFrame extends JFrame implements GLEventListener, KeyListener, MouseMotionListener, MouseListener {
     private int width;
     private int height;
     private float aspectRatio;
     private float angle = 0;
     private int framecount = 0;
 
+    private float mX = 0, mY = 0;
+
+    private JButton jb = new JButton("test");
+
+
+
+
+    private TextRenderer textRenderer;
+
     private Scene scene;
 
+
+
     public RenderFrame(int width, int height) {
+
         super("3D Renderer");
+
+        jb.setBounds(0,0,100,100);
+
+        //this.add(jb);
+
+        textRenderer = new TextRenderer(new Font("Dialog", Font.BOLD, 24));
+
+
 
         this.width = width;
         this.height = height;
@@ -34,6 +54,9 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener 
         glCanvas.addGLEventListener(this);
         glCanvas.setFocusable(true);
         glCanvas.addKeyListener(this);
+        glCanvas.addMouseListener(this);
+        glCanvas.addMouseMotionListener(this);
+
 
         this.setSize(this.width, this.height);
         this.getContentPane().add(glCanvas);
@@ -41,6 +64,7 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
         this.setResizable(true);
+
 
         glCanvas.requestFocusInWindow();
     }
@@ -77,6 +101,12 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener 
 
         Canvas2D canvas = new Canvas2D(gl);
         canvas.clear();
+
+
+
+        textRenderer.beginRendering(600, 600);
+        textRenderer.draw(" " + mX + " " + mY, 20, 20);
+        textRenderer.endRendering();
 
         canvas.setColor(1f, 1f, 1f, 0.5f);
         canvas.strokeWidth(2);
@@ -151,5 +181,43 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener 
         scene.enqueue(scene.dequeue());
 //        char pressed = e.getKeyChar();
 //        System.out.println(pressed);
+    }
+
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        System.out.println("pressed");
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        //System.out.println("enter");
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        mX = e.getX();
+        mY = e.getY();
+        //System.out.println(e);
     }
 }
