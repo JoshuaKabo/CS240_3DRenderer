@@ -8,9 +8,9 @@ public class Scene {
         this.objects = new ArrayList<WorldObject>();
     }
 
-    public void addMesh(Mesh mesh) {
+    public void addMesh(Mesh4D mesh) {
         WorldObject wo = new WorldObject(mesh);
-        wo.applyTranslation(Matrix.translationMatrix(0, 0, -2f));
+        wo.applyTranslation(Matrix.translationMatrix(0, 0, -5f, 0));
         objects.add(wo);
     }
 

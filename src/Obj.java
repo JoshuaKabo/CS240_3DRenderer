@@ -1,20 +1,13 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
-import java.util.Vector;
 
-public class Obj extends Mesh {
+public class Obj extends Mesh4D {
     private File objFile;
     private Scanner s;
     private GeometryGraph geoGraph = new GeometryGraph();
 
-
     public Obj(String fileName) throws FileNotFoundException {
-        float l2 = 1 / 2;
-        localMat = Matrix.translationMatrix(0, 0, 0);
-
         objFile = new File(fileName);
         s = new Scanner(objFile);
 
@@ -33,7 +26,7 @@ public class Obj extends Mesh {
                     for (int i = 0; i < rawNumbers.length; i++) {
                         axisAmounts[i] = Float.parseFloat(rawNumbers[i]);
                     }
-                    geoGraph.add(new GraphVertex3D(axisAmounts[0], axisAmounts[1], axisAmounts[2]));
+                    geoGraph.add(new GraphVertex4D(axisAmounts[0], axisAmounts[1], axisAmounts[2], 0f));
                 }
                 //if its a face, this part sets up the edges of the graph
                 else if (currentLine.substring(0, 2).equals("f ")) {

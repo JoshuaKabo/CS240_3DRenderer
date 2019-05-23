@@ -19,22 +19,10 @@ public class Canvas2D {
         gl.glLineWidth(width);
     }
 
-    public void strokeLine(Vertex2D v1, Vertex2D v2) {
-        strokeLine(v1.getX(), v1.getY(), v2.getX(), v2.getY());
-    }
-
     public void strokeLine(float x1, float y1, float x2, float y2) {
         gl.glBegin(GL2.GL_LINES);
         gl.glVertex3f(x1, y1, 0f);
         gl.glVertex3f(x2, y2, 0f);
-        gl.glEnd();
-    }
-
-    public void fillPolygon(Vertex2D[] verts) {
-        gl.glBegin(GL2.GL_POLYGON);
-        for (Vertex2D v : verts) {
-            gl.glVertex3f(v.getX(), v.getY(),0f);
-        }
         gl.glEnd();
     }
 }

@@ -1,15 +1,21 @@
 public class WorldObject {
-    private Mesh mesh;
-    private Matrix translationMat;
-    private Matrix scaleRotMat;
+    protected Mesh4D mesh;
+    protected Matrix translationMat;
+    protected Matrix scaleRotMat;
 
-    public WorldObject(Mesh mesh) {
+    public WorldObject() {}
+
+    public WorldObject(Mesh4D mesh) {
         this.mesh = mesh;
-        translationMat = Matrix.translationMatrix(0, 0, 0);
-        scaleRotMat = Matrix.translationMatrix(0, 0, 0);
+        translationMat = Matrix.translationMatrix(0, 0, 0, 0);
+        scaleRotMat = Matrix.translationMatrix(0, 0, 0, 0);
     }
 
-    public Mesh getMesh() {
+    public Iterable<Edge4D> getEdges() {
+        return mesh.getEdges();
+    }
+
+    public Mesh4D getMesh() {
         return mesh;
     }
 
@@ -19,14 +25,6 @@ public class WorldObject {
 
     public void applyScaleRotation(Matrix fnMat) {
         scaleRotMat = fnMat.multiply(scaleRotMat);
-    }
-
-    public Matrix getTranslationMat() {
-        return translationMat;
-    }
-
-    public Matrix getScaleRotMat() {
-        return scaleRotMat;
     }
 
     public Matrix getModelMat() {
