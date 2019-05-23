@@ -1,17 +1,13 @@
 import java.util.LinkedList;
 
-public class GraphVertex3D extends Vertex3D {
+public class GraphVertex4D extends Vertex4D {
 
     private LinkedList<Integer> adjacentVertices = new LinkedList<>();
-    private static int islinkedtrack = 0;
-    private static int linktrack = 0;
+//    private static int islinkedtrack = 0;
+//    private static int linktrack = 0;
 
-    public GraphVertex3D() {
-        this(0, 0, 0);
-    }
-
-    public GraphVertex3D(float x, float y, float z) {
-        super(x,y,z);
+    public GraphVertex4D(float x, float y, float z, float a) {
+        super(x, y, z, a);
     }
 
     public void link(int toLink) {

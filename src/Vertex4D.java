@@ -1,16 +1,18 @@
-public class Vertex3D {
+public class Vertex4D {
     protected float x;
     protected float y;
     protected float z;
+    protected float a;
 
-    public Vertex3D() {
-        this(0, 0, 0);
+    public Vertex4D() {
+        this(0, 0, 0, 0);
     }
 
-    public Vertex3D(float x, float y, float z) {
+    public Vertex4D(float x, float y, float z, float a) {
         this.x = x;
         this.y = y;
         this.z = z;
+        this.a = a;
     }
 
     public float getX() {
@@ -37,14 +39,22 @@ public class Vertex3D {
         this.z = z;
     }
 
+    public float getA() {
+        return a;
+    }
+
+    public void setA(float a) {
+        this.a = a;
+    }
+
     public String toString() {
-        return String.format("[%f, %f, %f]", x, y, z);
+        return String.format("[%f, %f, %f, %f]", x, y, z, a);
     }
 
     @Override
     public boolean equals(Object o) {
-        Vertex3D v =(Vertex3D)o;
-        if(v.x == x && v.y == y && v.z == z) {
+        Vertex4D v = (Vertex4D)o;
+        if(v.x == x && v.y == y && v.z == z && v.a == a) {
             return true;
         }
         else return false;
