@@ -30,9 +30,7 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
 
         super("3D Renderer");
 
-        jb.setBounds(0,0,100,100);
 
-        //this.add(jb);
 
         textRenderer = new TextRenderer(new Font("Dialog", Font.BOLD, 24));
 
@@ -41,6 +39,10 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
         this.width = width;
         this.height = height;
         scene = null;
+
+        jb.setBounds(0,0,100,100);
+
+        this.add(jb);
 
         GLProfile profile = GLProfile.get(GLProfile.GL2);
         GLCapabilities capabilities = new GLCapabilities(profile);
@@ -52,6 +54,9 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
         glCanvas.addMouseListener(this);
         glCanvas.addMouseMotionListener(this);
 
+     //   jb.setBounds(0,0,100,100);
+
+       // this.add(jb);
 
         this.setSize(this.width, this.height);
         this.getContentPane().add(glCanvas);
@@ -62,6 +67,8 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
 
 
         glCanvas.requestFocusInWindow();
+
+
     }
 
     @Override
@@ -91,6 +98,9 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
 
     @Override
     public void display(GLAutoDrawable drawable) {
+        jb.setBounds(0,0,100,100);
+        this.add(jb);
+
         GL2 gl = drawable.getGL().getGL2();
 
         Canvas2D canvas = new Canvas2D(gl);
