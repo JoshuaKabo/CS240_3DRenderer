@@ -21,9 +21,7 @@ public class Canvas2D {
 
     public void strokeLine(float x1, float y1, float x2, float y2) {
         gl.glBegin(GL2.GL_LINES);
-        gl.glColor3f(0,0,1);
         gl.glVertex3f(x1, y1, 0f);
-        gl.glColor3f(1,0,1);
         gl.glVertex3f(x2, y2, 0f);
         gl.glEnd();
     }

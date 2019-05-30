@@ -4,13 +4,14 @@ import java.io.FileNotFoundException;
 public class Main  {
 
     private static final String[] filenames = {
-            "/Users/liamdean/Documents/3DFOLDER/CS240_3DRenderer/suzanne.obj",
-            "/Users/liamdean/Documents/3DFOLDER/CS240_3DRenderer/cube.obj",
-            "/Users/liamdean/Documents/3DFOLDER/CS240_3DRenderer/sphere.obj"
+            "suzanne.obj",
+            "cube.obj",
+//            "crystals.obj",
+            "sphere.obj"
     };
 
     public static void main(String[] args) throws FileNotFoundException {
-        RenderFrame frame = new RenderFrame(1000, 1000);
+        RenderFrame frame = new RenderFrame(600, 600);
 
         Scene scene = new Scene();
         scene.addMesh(new Tesseract(1));
