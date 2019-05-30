@@ -4,9 +4,9 @@ import java.io.FileNotFoundException;
 public class Main  {
 
     private static final String[] filenames = {
-            "/Users/liamdean/Documents/3DFOLDER/CS240_3DRenderer/suzanne.obj",
-            "/Users/liamdean/Documents/3DFOLDER/CS240_3DRenderer/cube.obj",
-            "/Users/liamdean/Documents/3DFOLDER/CS240_3DRenderer/sphere.obj"
+            "suzanne.obj",
+            "cube.obj",
+            "sphere.obj"
     };
 
     public static void main(String[] args) throws FileNotFoundException {
@@ -15,7 +15,17 @@ public class Main  {
         Scene scene = new Scene();
         scene.addMesh(new Tesseract(1));
         for (String filename : filenames) {
-            scene.addMesh(new Obj(filename));
+            try {
+
+                scene.addMesh(new Obj(filename));
+            }
+            catch (FileNotFoundException e) {
+                for (int i = 0; i < filenames.length; i++) {
+                    String withPath = "/Users/liamdean/Documents/3DFOLDER/CS240_3DRenderer/" + filenames[i];
+                    filenames[i] = withPath;
+                    scene.addMesh(new Obj(withPath));
+                }
+            }
         }
         frame.setScene(scene);
     }
