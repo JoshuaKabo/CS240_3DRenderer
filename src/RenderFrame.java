@@ -12,10 +12,12 @@ import java.util.List;
 public class RenderFrame extends JFrame implements GLEventListener, KeyListener, MouseMotionListener, MouseListener {
     private int width;
     private int height;
-
+    private JButton jb;
     private float mX = 0, mY = 0;
 
-    private JButton jb = new JButton("test");
+    private Button2D button;
+
+    private Button2D[] buttons;
 
 
 
@@ -24,15 +26,16 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
 
     private Scene scene;
 
+    private anotherTest t;
+
 
 
     public RenderFrame(int width, int height) {
-
         super("3D Renderer");
 
-        jb.setBounds(0,0,100,100);
+        t=new anotherTest();
 
-        this.add(jb);
+        buttons = new Button2D[]{new Button2D(.1f,-.4f,0.8f,0.8f)};
 
         textRenderer = new TextRenderer(new Font("Dialog", Font.BOLD, 24));
 
@@ -62,6 +65,9 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
 
 
         glCanvas.requestFocusInWindow();
+
+        System.out.println(glCanvas.getX());
+        System.out.println(glCanvas.getY());
 
 
     }
@@ -95,13 +101,12 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
     public void display(GLAutoDrawable drawable) {
 
         GL2 gl = drawable.getGL().getGL2();
-
         Canvas2D canvas = new Canvas2D(gl);
         canvas.clear();
 
 
 
-        textRenderer.beginRendering(600, 600);
+        textRenderer.beginRendering(1000, 1000);
         textRenderer.draw(" " + mX + " " + mY, 20, 20);
         textRenderer.endRendering();
 
@@ -146,7 +151,9 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
                 }
             }
         }
-
+        for(Button2D b : buttons) {
+            b.renderButton(canvas, textRenderer);
+        }
         gl.glFlush();
     }
 
@@ -180,12 +187,17 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        e = SwingUtilities.convertMouseEvent(e.getComponent(),e,this);
+        for(Button2D b : buttons) {
+            System.out.println(b.isClicked(e.getX(), e.getY()));
+            b.isClicked(e.getX() , e.getY());
+        }
 
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        System.out.println("pressed");
+
     }
 
     @Override
@@ -210,8 +222,7 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        mX = e.getX();
-        mY = e.getY();
-        //System.out.println(e);
+        mX = (e.getX()-500);
+        mY = (e.getY()-500);
     }
 }
