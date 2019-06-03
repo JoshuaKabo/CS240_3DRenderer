@@ -13,12 +13,9 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
     private int width;
     private int height;
 
+    private int[] lastMousePos;
+
     private float mX = 0, mY = 0;
-
-
-
-
-
 
     private TextRenderer textRenderer;
 
@@ -73,7 +70,7 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
                 if (scene != null) {
                     List<WorldObject> objects = scene.getObjects();
                     for (WorldObject object : objects) {
-                        object.applyScaleRotation(rotMat4D);
+                        //object.applyScaleRotation(rotMat4D);
                     }
                 }
                 drawable.display();
@@ -181,12 +178,12 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
 
     @Override
     public void mousePressed(MouseEvent e) {
-        System.out.println("pressed");
+        //System.out.println("pressed");
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-
+        lastMousePos = null;
     }
 
     @Override
@@ -201,8 +198,32 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        System.out.println(e.getLocationOnScreen());
-        System.out.println(e.getX() + " " + e.getY());
+        int[] mouseDelta = getMouseDelta(e);
+        System.out.println(mouseDelta[0] + " " + mouseDelta[1]);
+        Matrix rotMat4D = Matrix.rotXZMatrix((float) Math.toRadians(-1*mouseDelta[0]));
+       // Matrix rotMat4D = Matrix.rotYZMatrix((float) Math.toRadians(-1*mouseDelta[1]));
+        rotMat4D = rotMat4D.multiply(Matrix.rotYZMatrix((float) Math.toRadians(-1*mouseDelta[1])));
+        if (scene != null) {
+            List<WorldObject> objects = scene.getObjects();
+            for (WorldObject object : objects) {
+                object.applyScaleRotation(rotMat4D);
+            }
+        }
+    }
+
+    private int[] getMouseDelta(MouseEvent e) {
+
+        if(lastMousePos == null) {
+            lastMousePos = new int[]{e.getX(), e.getY()};
+            return new int[]{0,0};
+        }
+        else {
+            int[] result = new int[]{e.getX() - lastMousePos[0], e.getY() - lastMousePos[1]};
+
+            lastMousePos[0] = e.getX();
+            lastMousePos[1] = e.getY();
+            return(result);
+        }
     }
 
 
