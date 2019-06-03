@@ -15,7 +15,7 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
 
     private float mX = 0, mY = 0;
 
-    private JButton jb = new JButton("test");
+
 
 
 
@@ -29,10 +29,6 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
     public RenderFrame(int width, int height) {
 
         super("3D Renderer");
-
-        jb.setBounds(0,0,100,100);
-
-        this.add(jb);
 
         textRenderer = new TextRenderer(new Font("Dialog", Font.BOLD, 24));
 
@@ -205,8 +201,11 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
 
     @Override
     public void mouseDragged(MouseEvent e) {
-
+        System.out.println(e.getLocationOnScreen());
+        System.out.println(e.getX() + " " + e.getY());
     }
+
+
 
     @Override
     public void mouseMoved(MouseEvent e) {
