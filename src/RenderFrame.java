@@ -15,11 +15,13 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
 
     private int[] lastMousePos;
 
-    private float mX = 0, mY = 0;
-
     private TextRenderer textRenderer;
 
     private Scene scene;
+
+    private boolean spacePressed = false;
+
+    private char modifierSymbol = '+';
 
 
 
@@ -94,8 +96,19 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
 
 
 
-        textRenderer.beginRendering(600, 600);
-        textRenderer.draw(" " + mX + " " + mY, 20, 20);
+        textRenderer.beginRendering(1000, 1000);
+        if(spacePressed)
+            modifierSymbol = '-';
+        else
+            modifierSymbol = '+';
+        //Matrix rotMat4D = Matrix.rotXMatrix((float) Math.toRadians(-1*mouseDelta[0]));
+        textRenderer.draw( "Reset : \'Y\'", 860, 20);
+        textRenderer.draw( "Model : \'T\'", 20, 110);
+        textRenderer.draw( "+/- : \'Space\'", 20, 80);
+
+        textRenderer.draw( "+/- XZ & YZ : Click and Drag", 20, 50);
+        textRenderer.draw( " \'Q\' : " + modifierSymbol +  "XY " +
+                "\'W\' : " + modifierSymbol + " XY ", 20, 20);
         textRenderer.endRendering();
 
         canvas.setColor(1f, 1f, 1f, 0.5f);
@@ -155,17 +168,29 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
 
     @Override
     public void keyPressed(KeyEvent e) {
-//        char pressed = e.getKeyChar();
-//        System.out.println(pressed);
+        //T is 84
+        if (e.getKeyCode() == 84) {
+            scene.enqueue(scene.dequeue());
+        }
+
+        //space is 32
+        if(e.getKeyCode() == 32) {
+            spacePressed = true;
+        }
+
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
+        //space is 32
+        if(e.getKeyCode() == 32)
+            spacePressed = false;
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
-        scene.enqueue(scene.dequeue());
+
+
 //        char pressed = e.getKeyChar();
 //        System.out.println(pressed);
     }
@@ -199,9 +224,8 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
     @Override
     public void mouseDragged(MouseEvent e) {
         int[] mouseDelta = getMouseDelta(e);
-        System.out.println(mouseDelta[0] + " " + mouseDelta[1]);
+        //System.out.println(mouseDelta[0] + " " + mouseDelta[1]);
         Matrix rotMat4D = Matrix.rotXZMatrix((float) Math.toRadians(-1*mouseDelta[0]));
-       // Matrix rotMat4D = Matrix.rotYZMatrix((float) Math.toRadians(-1*mouseDelta[1]));
         rotMat4D = rotMat4D.multiply(Matrix.rotYZMatrix((float) Math.toRadians(-1*mouseDelta[1])));
         if (scene != null) {
             List<WorldObject> objects = scene.getObjects();
@@ -230,8 +254,6 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        mX = e.getX();
-        mY = e.getY();
         //System.out.println(e);
     }
 }
