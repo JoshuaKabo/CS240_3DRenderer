@@ -17,24 +17,47 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
 
     private JButton jb = new JButton("test");
 
-
-
-
     private TextRenderer textRenderer;
-
     private Scene scene;
+   // private Color newColor = JColorChooser.showDialog(null, "Choose a color", Color.WHITE);
+    private JMenuBar menuBar = new JMenuBar(); // Window menu bar
 
 
 
     public RenderFrame(int width, int height) {
 
         super("3D Renderer");
-
-        jb.setBounds(0,0,100,100);
-
-        this.add(jb);
+        //newColor = new Color();
 
         textRenderer = new TextRenderer(new Font("Dialog", Font.BOLD, 24));
+
+
+        setJMenuBar(menuBar); // Add the menu bar to the window
+
+        JMenu fileMenu = new JMenu("Visuals"); // Create Visuals menu
+        menuBar.add(fileMenu); // Add the Visual menu
+        fileMenu.setMnemonic(KeyEvent.VK_F);
+
+        JMenu MenuItem = new JMenu("Color");//Create color Menu
+        MenuItem.setMnemonic(KeyEvent.VK_E);
+        fileMenu.add(MenuItem);//Add color menu
+
+        JMenu Menu3D = new JMenu("3D");//Create 3d Menu
+       // MenuItem.setMnemonic(KeyEvent.VK_E);
+        fileMenu.add(Menu3D);//Add 3d menu
+
+        JMenu Menu4D = new JMenu("4D");//Create 4D Menu
+       // MenuItem.setMnemonic(KeyEvent.VK_E);
+        fileMenu.add(Menu4D);//Add color menu
+
+        JMenu RedMenu = new JMenu("Red");
+        JMenu BlueMenu = new JMenu("Blue");
+        JMenu GreenMenu = new JMenu("Green");
+
+        MenuItem.add(RedMenu);
+        MenuItem.add(BlueMenu);
+        MenuItem.add(GreenMenu);
+
 
 
 
@@ -44,7 +67,6 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
 
         GLProfile profile = GLProfile.get(GLProfile.GL2);
         GLCapabilities capabilities = new GLCapabilities(profile);
-
         GLCanvas glCanvas = new GLCanvas(capabilities);
         glCanvas.addGLEventListener(this);
         glCanvas.setFocusable(true);
@@ -53,7 +75,8 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
         glCanvas.addMouseMotionListener(this);
 
 
-        this.setSize(this.width, this.height);
+
+        this.setSize(1000, 1000);
         this.getContentPane().add(glCanvas);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -101,11 +124,11 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
 
 
 
-        textRenderer.beginRendering(600, 600);
-        textRenderer.draw(" " + mX + " " + mY, 20, 20);
+        textRenderer.beginRendering(1000, 1000);
+        textRenderer.draw(" " + mX + " " + mY, 10, 10);
         textRenderer.endRendering();
 
-        canvas.setColor(1f, 1f, 1f, 0.5f);
+      //canvas.setColor(newColor.getRed(),newColor.getGreen(),newColor.getBlue(),newColor.getAlpha());
         canvas.strokeWidth(2);
 
         float scaleDim;
@@ -141,7 +164,7 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
                     float z2 = v2.getZ();
                     float x2 = v2.getX() / (-z2 * a2);
                     float y2 = v2.getY() / (-z2 * a2);
-
+                    //canvas.setColor(newColor);
                     canvas.strokeLine(x1, y1, x2, y2);
                 }
             }
@@ -162,8 +185,9 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
 
     @Override
     public void keyPressed(KeyEvent e) {
-//        char pressed = e.getKeyChar();
-//        System.out.println(pressed);
+        char pressed = e.getKeyChar();
+        System.out.println(pressed);
+
     }
 
     @Override
@@ -173,9 +197,11 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
     @Override
     public void keyTyped(KeyEvent e) {
         scene.enqueue(scene.dequeue());
+
+        }
 //        char pressed = e.getKeyChar();
 //        System.out.println(pressed);
-    }
+
 
 
     @Override
@@ -185,7 +211,7 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
 
     @Override
     public void mousePressed(MouseEvent e) {
-        System.out.println("pressed");
+        //System.out.println("pressed");
     }
 
     @Override
