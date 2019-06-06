@@ -75,7 +75,7 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
                 rotMat4D = rotMat4D.multiply(Matrix.rotYZMatrix((float) Math.toRadians(ROTATION_MULT * modifier * (keyRot[4] | lockRot[4]))));
                 rotMat4D = rotMat4D.multiply(Matrix.rotXZMatrix((float) Math.toRadians(ROTATION_MULT * modifier * (keyRot[5] | lockRot[5]))));
 
-                Matrix transMat4D = Matrix.translationMatrix(0, 0, 0, keyTrans);
+                Matrix transMat4D = Matrix.translationMatrix(0, 0, keyTrans, 0);
 
                 if (scene != null) {
                     List<WorldObject> objects = scene.getObjects();
@@ -141,6 +141,8 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
 
         if (scene != null) {
             WorldObject object = scene.peek();
+
+            boolean anyCoords4D = false;
             if (object != null) {
                 Matrix modelMat = object.getModelMat();
 
@@ -163,9 +165,19 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
                     float x2 = v2.getX() / (-z2 * a2);
                     float y2 = v2.getY() / (-z2 * a2);
 
+                    if (a1 != 1 || a2 != 1) {
+                        anyCoords4D = true;
+                    }
+
+                    if (z1 > 0 || z2 > 0) {
+                        continue;
+                    }
+
                     canvas.strokeLine(x1, y1, x2, y2);
                 }
             }
+
+            this.setTitle(anyCoords4D ? "4D Renderer" : "3D Renderer");
         }
 
         gl.glFlush();
@@ -184,8 +196,6 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
     @Override
     public void keyPressed(KeyEvent e) {
 
-        System.out.println(e.getKeyCode());
-
         //Enter is 10
         if (e.getKeyCode() == 10) {
             for (int i = 0; i < 6; i++) {
@@ -197,10 +207,6 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
         if(e.getKeyCode() == 32) {
             modifier = -1;
             spacePressed = true;
-
-            for (int i = 0; i < 6; i++) {
-                lockRot[i] *= -1;
-            }
         }
 
         if (e.getKeyCode() == 'T')
@@ -225,10 +231,10 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
             keyRot[5] = 1;
 
         if(e.getKeyCode() == '-')
-            keyTrans = 0.01f;
+            keyTrans = 0.05f;
 
         if(e.getKeyCode() == '=')
-            keyTrans = -0.01f;
+            keyTrans = -0.05f;
 
         if (scene != null) {
             if (e.getKeyCode() == 'R') {
@@ -252,6 +258,10 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
         if(e.getKeyCode() == 32) {
             modifier = 1;
             spacePressed = false;
+
+            for (int i = 0; i < 6; i++) {
+                lockRot[i] *= -1;
+            }
         }
 
         if(e.getKeyCode() == 'Q')
