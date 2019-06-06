@@ -1,8 +1,6 @@
 import com.jogamp.opengl.*;
 import com.jogamp.opengl.awt.GLCanvas;
-
 import com.jogamp.opengl.util.awt.TextRenderer;
-
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,20 +16,18 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
     private TextRenderer textRenderer;
 
     private Scene scene;
+    private final float ROTATION_MULT = 1.5f;
 
     private boolean spacePressed = false;
-
+    private boolean lockPressed = false;
     private char modifierSymbol = '+';
-
     private byte modifier = 1;
 
-    private byte qRot = 0;
-    private byte wRot = 0;
-    private byte eRot = 0;
 
+    private byte[] keyRot;
+    private byte[] lockRot;
 
-
-
+    private float keyTrans;
 
     public RenderFrame(int width, int height) {
 
@@ -39,11 +35,10 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
 
         textRenderer = new TextRenderer(new Font("Dialog", Font.BOLD, 24));
 
-
-
         this.width = width;
         this.height = height;
-        scene = null;
+        keyRot = new byte[6];
+        lockRot = new byte[6];
 
         GLProfile profile = GLProfile.get(GLProfile.GL2);
         GLCapabilities capabilities = new GLCapabilities(profile);
@@ -65,8 +60,6 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
 
 
         glCanvas.requestFocusInWindow();
-
-
     }
 
     @Override
@@ -75,14 +68,19 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
             public void actionPerformed(ActionEvent evt) {
                 //apply rotations to this matrix by pressing keys
                 Matrix rotMat4D = Matrix.scaleMatrix(1,1,1,1);
-                rotMat4D = rotMat4D.multiply(Matrix.rotXYMatrix((float) Math.toRadians(modifier * qRot)));
-                rotMat4D = rotMat4D.multiply(Matrix.rotYAMatrix((float) Math.toRadians(modifier * wRot)));
-                rotMat4D = rotMat4D.multiply(Matrix.rotZAMatrix((float) Math.toRadians(modifier * eRot)));
+                rotMat4D = rotMat4D.multiply(Matrix.rotXAMatrix((float) Math.toRadians(ROTATION_MULT * modifier * (keyRot[0] | lockRot[0]))));
+                rotMat4D = rotMat4D.multiply(Matrix.rotYAMatrix((float) Math.toRadians(ROTATION_MULT * modifier * (keyRot[1] | lockRot[1]))));
+                rotMat4D = rotMat4D.multiply(Matrix.rotZAMatrix((float) Math.toRadians(ROTATION_MULT * modifier * (keyRot[2] | lockRot[2]))));
+                rotMat4D = rotMat4D.multiply(Matrix.rotXYMatrix((float) Math.toRadians(ROTATION_MULT * modifier * (keyRot[3] | lockRot[3]))));
+                rotMat4D = rotMat4D.multiply(Matrix.rotYZMatrix((float) Math.toRadians(ROTATION_MULT * modifier * (keyRot[4] | lockRot[4]))));
+                rotMat4D = rotMat4D.multiply(Matrix.rotXZMatrix((float) Math.toRadians(ROTATION_MULT * modifier * (keyRot[5] | lockRot[5]))));
 
+                Matrix transMat4D = Matrix.translationMatrix(0, 0, 0, keyTrans);
 
                 if (scene != null) {
                     List<WorldObject> objects = scene.getObjects();
                     for (WorldObject object : objects) {
+                        object.applyTranslation(transMat4D);
                         object.applyScaleRotation(rotMat4D);
                     }
                 }
@@ -105,24 +103,27 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
         Canvas2D canvas = new Canvas2D(gl);
         canvas.clear();
 
-
-
         textRenderer.beginRendering(1000, 1000);
 
-        if(spacePressed)
+        if (spacePressed)
             modifierSymbol = '-';
         else
             modifierSymbol = '+';
 
         //Matrix rotMat4D = Matrix.rotYMatrix((float) Math.toRadians(-1*mouseDelta[0]));
+        textRenderer.draw( "Lock : \'Enter\'", 825, 50);
         textRenderer.draw( "Reset : \'R\'", 860, 20);
-        textRenderer.draw( "Model : \'T\'", 20, 110);
-        textRenderer.draw( "+/- : \'Space\'", 20, 80);
 
-        textRenderer.draw( "+/- XZ & YZ : Click and Drag", 20, 50);
-        textRenderer.draw( "\'Q\' : " + modifierSymbol +  "XY    " +
-                "\'W\' : " + modifierSymbol + "YA    " +
-                "\'E\' : " + modifierSymbol + "ZA " , 20, 20);
+        textRenderer.draw( "Model : \'T\'", 20, 140);
+        textRenderer.draw( "+/- : \'Space\'", 20, 110);
+
+        textRenderer.draw( "+/- XZ & YZ : Click and Drag", 20, 80);
+        textRenderer.draw( "\'Q\' : " + modifierSymbol +  "XA   " +
+                "\'W\' : " + modifierSymbol + "YA   " +
+                "\'E\' : " + modifierSymbol + "ZA " , 20, 50);
+        textRenderer.draw( "\'A\' : " + modifierSymbol +  "XY    " +
+                "\'S\' : " + modifierSymbol + "YZ    " +
+                "\'D\' : " + modifierSymbol + "XZ " , 20, 20);
         textRenderer.endRendering();
 
         canvas.setColor(1f, 1f, 1f, 0.5f);
@@ -182,76 +183,97 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
 
     @Override
     public void keyPressed(KeyEvent e) {
-        //T is 84
-        if (e.getKeyCode() == 84)
-            scene.enqueue(scene.dequeue());
 
+        System.out.println(e.getKeyCode());
+
+        //Enter is 10
+        if (e.getKeyCode() == 10) {
+            for (int i = 0; i < 6; i++) {
+                lockRot[i] = keyRot[i];
+            }
+        }
 
         //space is 32
         if(e.getKeyCode() == 32) {
             modifier = -1;
             spacePressed = true;
+
+            for (int i = 0; i < 6; i++) {
+                lockRot[i] *= -1;
+            }
         }
 
-        //apply rotations to this matrix by pressing keys
-        Matrix rotMat4D = Matrix.scaleMatrix(1,1,1,1);
+        if (e.getKeyCode() == 'T')
+            scene.enqueue(scene.dequeue());
 
-        //Q is 81
-        if(e.getKeyCode() == 81)
-            qRot=1;
+        if(e.getKeyCode() == 'Q')
+            keyRot[0] = 1;
 
-        //W is 87
-        if(e.getKeyCode() == 87)
-            wRot=1;
+        if(e.getKeyCode() == 'W')
+            keyRot[1] = 1;
 
-        //E is 69
-        if(e.getKeyCode() == 69)
-            eRot = 1;
+        if(e.getKeyCode() == 'E')
+            keyRot[2] = 1;
+
+        if(e.getKeyCode() == 'A')
+            keyRot[3] = 1;
+
+        if(e.getKeyCode() == 'S')
+            keyRot[4] = 1;
+
+        if(e.getKeyCode() == 'D')
+            keyRot[5] = 1;
+
+        if(e.getKeyCode() == '-')
+            keyTrans = 0.01f;
+
+        if(e.getKeyCode() == '=')
+            keyTrans = -0.01f;
 
         if (scene != null) {
-
-            //R is 82
-            if (e.getKeyCode() == 82) {
+            if (e.getKeyCode() == 'R') {
                 List<WorldObject> objects = scene.getObjects();
                 for (WorldObject object : objects) {
-                    for (int i = 0; i < 5; i++) {
-                        for (int j = 0; j < 5; j++) {
-                            if(i==j)
-                                object.scaleRotMat.setVal(i,j,1.0f);
-                            else
-                                object.scaleRotMat.setVal(i,j,0.0f);
-                        }
-                    }
+                    object.scaleRotMat = Matrix.scaleMatrix(1,1,1,1);
+                    object.translationMat = Matrix.translationMatrix(0, 0, -5, 0);
+                }
+
+                for (int i = 0; i < 6; i++) {
+                    lockRot[i] = 0;
                 }
             }
-
-            List<WorldObject> objects = scene.getObjects();
-            for (WorldObject object : objects) {
-                object.applyScaleRotation(rotMat4D);
-            }
         }
-
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
+
         //space is 32
         if(e.getKeyCode() == 32) {
             modifier = 1;
             spacePressed = false;
         }
 
-        //Q is 81
-        if(e.getKeyCode() == 81)
-            qRot=0;
+        if(e.getKeyCode() == 'Q')
+            keyRot[0] = 0;
 
-        //W is 87
-        if(e.getKeyCode() == 87)
-            wRot=0;
+        if(e.getKeyCode() == 'W')
+            keyRot[1] = 0;
 
-        //E is 69
-        if(e.getKeyCode() == 69)
-            eRot = 0;
+        if(e.getKeyCode() == 'E')
+            keyRot[2] = 0;
+
+        if(e.getKeyCode() == 'A')
+            keyRot[3] = 0;
+
+        if(e.getKeyCode() == 'S')
+            keyRot[4] = 0;
+
+        if(e.getKeyCode() == 'D')
+            keyRot[5] = 0;
+
+        if(e.getKeyCode() == '-' || e.getKeyCode() == '=')
+            keyTrans = 0;
     }
 
     @Override
@@ -289,8 +311,8 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
     public void mouseDragged(MouseEvent e) {
         int[] mouseDelta = getMouseDelta(e);
 
-        Matrix rotMat4D = Matrix.rotXZMatrix((float) Math.toRadians(-1*mouseDelta[0]));
-        rotMat4D = rotMat4D.multiply(Matrix.rotYZMatrix((float) Math.toRadians(-1*mouseDelta[1])));
+        Matrix rotMat4D = Matrix.rotXZMatrix((float) Math.toRadians(-1 * mouseDelta[0]));
+        rotMat4D = rotMat4D.multiply(Matrix.rotYZMatrix((float) Math.toRadians(-1 * mouseDelta[1])));
         if (scene != null) {
             List<WorldObject> objects = scene.getObjects();
             for (WorldObject object : objects) {
@@ -301,7 +323,7 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
 
     private int[] getMouseDelta(MouseEvent e) {
 
-        if(lastMousePos == null) {
+        if (lastMousePos == null) {
             lastMousePos = new int[]{e.getX(), e.getY()};
             return new int[]{0,0};
         }
@@ -313,8 +335,6 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
             return(result);
         }
     }
-
-
 
     @Override
     public void mouseMoved(MouseEvent e) {
