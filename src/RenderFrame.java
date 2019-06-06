@@ -1,26 +1,28 @@
 import com.jogamp.opengl.*;
 import com.jogamp.opengl.awt.GLCanvas;
-
 import com.jogamp.opengl.util.awt.TextRenderer;
 
-
 import javax.swing.*;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
 
-public class RenderFrame extends JFrame implements GLEventListener, KeyListener, MouseMotionListener, MouseListener {
-    private int width;
-    private int height;
+public class RenderFrame extends JFrame implements GLEventListener, KeyListener, MouseMotionListener, MouseListener, MenuListener, ActionListener {
+  private int width;
+  private int height;
 
     private int[] lastMousePos;
 
     private float mX = 0, mY = 0;
 
-    private TextRenderer textRenderer;
+  //private JButton jb = new JButton("test");
 
-    private Scene scene;
-
+  private TextRenderer textRenderer;
+  private Scene scene;
+  // private Color newColor = JColorChooser.showDialog(null, "Choose a color", Color.WHITE);
+  private JMenuBar menuBar = new JMenuBar(); // Window menu bar
 
 
     public RenderFrame(int width, int height) {
@@ -29,6 +31,35 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
 
         textRenderer = new TextRenderer(new Font("Dialog", Font.BOLD, 24));
 
+
+    setJMenuBar(menuBar); // Add the menu bar to the window
+
+    JMenu fileMenu = new JMenu("Visuals"); // Create Visuals menu
+    menuBar.add(fileMenu); // Add the Visual menu
+    fileMenu.setMnemonic(KeyEvent.VK_F);
+
+    JMenu MenuItem = new JMenu("Color");//Create color Menu
+    // MenuItem.setMnemonic(KeyEvent.VK_E);
+    fileMenu.add(MenuItem);//Add color menu
+
+    JMenu Menu3D = new JMenu("3D");//Create 3d Menu
+    // MenuItem.setMnemonic(KeyEvent.VK_E);
+    fileMenu.add(Menu3D);//Add 3d menu
+
+    JMenu Menu4D = new JMenu("4D");//Create 4D Menu
+    // MenuItem.setMnemonic(KeyEvent.VK_E);
+    fileMenu.add(Menu4D);//Add color menu
+
+    JMenu RedMenu = new JMenu("Red");
+    RedMenu.addActionListener(this);
+    JMenu BlueMenu = new JMenu("Blue");
+    BlueMenu.addActionListener(this);
+    JMenu GreenMenu = new JMenu("Green");
+    GreenMenu.addActionListener(this);
+
+    MenuItem.add(RedMenu);
+    MenuItem.add(BlueMenu);
+    MenuItem.add(GreenMenu);
 
 
         this.width = width;
@@ -70,7 +101,7 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
                 if (scene != null) {
                     List<WorldObject> objects = scene.getObjects();
                     for (WorldObject object : objects) {
-                        //object.applyScaleRotation(rotMat4D);
+                        //\object.applyScaleRotation(rotMat4D);
                     }
                 }
                 drawable.display();
@@ -228,10 +259,35 @@ public class RenderFrame extends JFrame implements GLEventListener, KeyListener,
 
 
 
-    @Override
-    public void mouseMoved(MouseEvent e) {
-        mX = e.getX();
-        mY = e.getY();
-        //System.out.println(e);
+  @Override
+  public void mouseMoved(MouseEvent e) {
+    mX = e.getX();
+    mY = e.getY();
+    //System.out.println(e);
+  }
+
+  @Override
+  public void menuSelected(MenuEvent e) {
+
+  }
+
+  @Override
+  public void menuDeselected(MenuEvent e) {
+
+  }
+
+  @Override
+  public void menuCanceled(MenuEvent e) {
+
+  }
+
+
+  @Override
+public void actionPerformed(ActionEvent e) {
+  //  if (e.getSource().equals(RedMenu)){
+    //    canvas.setColor(newColor.getRed(),newColor.getGreen(),newColor.getBlue(),newColor.getAlpha());
+
+
+
     }
 }
